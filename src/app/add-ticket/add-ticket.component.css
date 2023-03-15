@@ -1,0 +1,24 @@
+.hrText {
+    text-align: center;
+}
+.hdr {
+    background-color: lightblue;
+}
+.tktNum {
+    float: right;
+    
+}
+.gnrInfo {
+    background-color: lightblue;
+    padding: 2px;
+}
+.marginTop{
+    margin-top: 20px;
+}
+.inline1,.inline2{
+    display: inline;
+    margin-top: 20px;
+}
+.margin {
+    margin: 5px 15px;
+}

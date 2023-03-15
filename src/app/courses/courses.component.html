@@ -1,0 +1,554 @@
+  <!-- <br>
+<nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+   <ol class="breadcrumb" style="margin-left: 10px;">
+      <li class="breadcrumb-item" style="color:grey; text-decoration: none;">Menu</li>
+      <li class="breadcrumb-item"  style="color:grey; text-decoration: none;">Manage</li>
+      <li class="breadcrumb-item active" aria-current="page"> <a routerLink="/current"><strong>Courses</strong></a></li>
+   </ol>
+ </nav>
+
+<h3>&nbsp;Courses</h3>
+
+<div class="Searchbuttons container">
+  <input class="search-form form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off"
+    placeholder="Search Courses">
+
+  <button type="button" class="filter btn btn-lg " data-bs-toggle="modal" data-bs-target="#ModalFilterForm">
+    <i class="fa fa-filter" aria-hidden="true" data-bs-toggle="tooltip" title="Filter Courses"
+      data-bs-placement="bottom"></i>
+  </button>
+
+  <button type="button" class="add-course btn btn-lg " data-bs-toggle="modal" data-bs-target="#ModalAddCourse">
+      <i class="fa fa-plus" aria-hidden="true" data-bs-toggle="tooltip" title="Add New Course"
+        data-bs-placement="right"></i>
+    </button>
+</div>
+
+<div id="ModalFilterForm" class="modal right fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <input type="hidden" name="_token" value="">
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="coursecode" id="courseCode"
+                [(ngModel)]="fcoursecode" value="">
+              <label for="courseCode">Course Code</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="coursename" id="courseName"
+                [(ngModel)]="fcourseName" value="">
+              <label for="courseName">Name</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="desc" id="desc" [(ngModel)]="fDesc" value="">
+              <label for="desc">Description</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <select class="form-select rounded-3" name="Mode" id="Mode" [(ngModel)]="fMode">
+                <option value="default">...</option>
+                <option value="Online"> Online </option>
+                <option value="Face-To-Face">Face-To-Face</option>
+              </select>
+              <label for="Mode">Mode</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <select class="form-select rounded-3" name="Type" id="type" [(ngModel)]="fType">
+                <option value="default">...</option>
+                <option value="Audio">Audio</option>
+                <option value="Video">Video</option>
+                <option value="Video">Book</option>
+              </select>
+              <label for="type"> Type </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="session" id="session" [(ngModel)]="fSession"
+                value="">
+              <label for="session">Sessions</label>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            <div>
+              <button type="reset" class="search btn btn-success btn-space"
+                (click)="sendCourseSearchPayload(fcoursecode,fcourseName,fMode, fDesc)" data-bs-dismiss="modal"
+                id="search">
+                Search
+              </button>
+              <button type="reset" class="cancel btn btn-secondary btn-space" data-bs-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div id="ModalAddCourse" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel" style="text-align:center">Add New Course</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" style="max-height:500px;">
+        <form #courseAddForm = "ngForm">
+          <input type="hidden" name="_token" value="">
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="courseCode" id="courseCode"
+                [(ngModel)]="aCourseCode" value="" ngModel required>
+              <label for="courseCode">Course Code</label>
+              <div *ngIf="courseCode && courseCode.invalid && (courseCode.dirty || courseCode.touched)" class="alert alert-danger validation-error">
+                <div *ngIf="courseCode.errors?.['required']">Course Code is required.</div>
+                <div *ngIf="courseCode.errors?.['pattern']">
+                    Enter 10 digit phone number.
+                </div>
+            </div>
+
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="coursename" id="courseName"
+                [(ngModel)]="aCourseName" value="" ngModel>
+              <label for="courseName">Course Name</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <textarea type="text" class="form-control rounded-3" name="Description" id="desc" [(ngModel)]="aDesc"
+              ngModel>
+                    </textarea>
+              <label for="desc">Description</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <textarea type="text" class="form-control rounded-3" name="Agenda" id="agenda" [(ngModel)]="aAgenda"
+              ngModel>
+                    </textarea>
+              <label for="agenda">Agenda</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="sessions" id="session" [(ngModel)]="aSession"
+                value="" ngModel>
+              <label for="session">Number of Sessions</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="Duration" id="duration" [(ngModel)]="aDuration"
+                value="" ngModel>
+              <label for="days">Duration</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" name="Link" id="link" [(ngModel)]="aLink" value=""
+              ngModel>
+              <label for="link">Link</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <select class="form-select rounded-3" name="Mode" id="Mode" [(ngModel)]="aMode" ngModel>
+                <option value="default">...</option>
+                <option value="Online"> Online </option>
+                <option value="Face-To-Face">Face-To-Face</option>
+              </select>
+              <label for="Mode">Mode</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <select class="form-select rounded-3" name="Type" id="type" [(ngModel)]="aType" ngModel>
+                <option value="default">...</option>
+                <option value="Audio">Audio</option>
+                <option value="Video">Video</option>
+                <option value="Video">Book</option>
+              </select>
+              <label for="type"> Type </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <select class="form-select rounded-3" name="Level" id="level" [(ngModel)]="aLevel" ngModel>
+                <option value="default">...</option>
+                <option value="L1">L1</option>
+                <option value="L2">L2</option>
+                <option value="L3">L3</option>
+                <option value="L4">L4</option>
+                <option value="L5">L5</option>
+                <option value="L6">L6</option>
+                <option value="L7">L7</option>
+                <option value="L8">L8</option>
+
+              </select>
+              <label for="level"> Level </label>
+            </div>
+          </div>
+          <br>
+          <div class="form-group">
+            <div>
+              <button type="reset" class="btn btn-success btn-space" [disabled]="!courseAddForm.dirty"
+                (click)="sendAddCoursePayload(aCourseCode, aCourseName, aDesc, aAgenda, aSession, aDuration, aMode, aLink)" 
+                data-bs-dismiss="modal">
+                Add
+              </button>
+              <button type="reset" class="cancel btn btn-secondary btn-space" data-bs-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="ModalEditCourse" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel" style="text-align:center">Edit Course</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <form [formGroup]="formValue" #courseEditForm = "ngForm">
+          <input type="hidden" name="_token" value="">
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" formControlName="courseid" id="courseid">
+              <label for="courseid">Course ID</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" formControlName="courseCode" id="courseCode" required>
+              <label for="courseCode">Course Code</label>
+              <div *ngIf="courseCode && courseCode.invalid && (courseCode.dirty || courseCode.touched)" class="alert alert-danger validation-error">
+                <div *ngIf="courseCode.errors?.['required']">Course Code is required.</div>
+                <div *ngIf="courseCode.errors?.['pattern']">
+                    Enter 10 digit phone number.
+                </div>
+            </div>
+    
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" formControlName="coursename" id="courseName" value="" >
+              <label for="courseName">Course Name</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <textarea type="text" class="form-control rounded-3" formControlName="Description" id="desc">
+              </textarea>
+              <label for="desc">Description</label>
+            </div>
+          </div>
+
+          <div class="form-group float-container">
+            <div class="form-floating mb-1">
+              <textarea type="text" class="form-control rounded-3" formControlName="Agenda" id="agenda">
+              </textarea>
+              <label for="agenda">Agenda</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" formControlName="sessions" id="session">
+              <label for="session">Number of Sessions</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" formControlName="Duration" id="duration">
+              <label for="days">Duration</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <input type="text" class="form-control rounded-3" formControlName="Link" id="link">
+              <label for="link">Drive Link</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <select class="form-select rounded-3" name="Mode" id="Mode" formControlName="Mode">
+                <option value="Online"> Online </option>
+                <option value="Face-To-Face">Face-To-Face</option>
+              </select>
+              <label for="Mode">Mode</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <select class="form-select rounded-3" name="Type" id="type" formControlName="Type">
+                <option value="Audio">Audio</option>
+                <option value="Video">Video</option>
+                <option value="Book">Book</option>
+              </select>
+              <label for="type"> Type </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="form-floating mb-1">
+              <select class="form-select rounded-3" name="Level" id="level" formControlName="Level">
+                <option value="L1">L1</option>
+                <option value="L2">L2</option>
+                <option value="L3">L3</option>
+                <option value="L4">L4</option>
+                <option value="L5">L5</option>
+                <option value="L6">L6</option>
+                <option value="L7">L7</option>
+                <option value="L8">L8</option>
+              </select>
+              <label for="level"> Level </label>
+            </div>
+          </div>
+
+
+          <br>
+          <div class="form-group">
+            <div>
+              <button type="reset" class="btn btn-success btn-space" [disabled]="!formValue.dirty"
+                (click)="sendUpdateCoursePayload()" data-bs-dismiss="modal">
+                Update
+              </button>
+              <button type="reset" class="cancel btn btn-secondary btn-space" data-bs-dismiss="modal">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+
+
+<div class="row row-cols-1 row-cols-md-3 g-3">
+  <div class="col" *ngFor="let course of latestCourses | searchfilter:searchText">
+    <div class="card">
+      <div class="card-header">
+        <h5 data-bs-toggle="tooltip" title='{{course.courseNameTransalation}}' data-bs-placement="top">
+          <a class="courseheader" href={{course.CrsLink}} style="text-decoration: none;">
+            <strong> {{course.CrsName}} </strong>
+          </a>
+        </h5>
+
+        <div class="dropdown">
+          <button class="more btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+          </button>
+          <ul class="dropdown-menu" style="padding: 2px 3px; min-width: 1px !important; float: inline-start">
+            <li class="button">
+              <button class="btn dropdown-item dropbutton" data-bs-toggle="modal"
+                data-bs-target="#ModalEditCourse" (click)="onEdit(course)">
+                <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" title="Edit"
+                  data-bs-placement="bottom"></i>
+              </button>
+            </li>
+           
+            <li class="button">
+              <button class="btn dropdown-item dropbutton" (click)="deleteACourse(course)">
+                <i class="fa fa-trash-o" aria-hidden="true" data-bs-toggle="tooltip" title="Edit"
+                  data-bs-placement="bottom"></i>
+              </button>
+            </li>
+            <li class="button">
+              <button class="btn dropdown-item dropbutton" routerLink="/courseschedule" data-bs-toggle="modal"
+                data-bs-target="#ModalViewCourse">
+                <i class="fa fa-clock" aria-hidden="true" data-bs-toggle="tooltip" title="Edit"
+                  data-bs-placement="bottom"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="card-body">
+        <p class="card-text"> <strong>Description: </strong> {{course.CrsDesc}} </p>
+        <p class="card-text"> <strong>What you'll learn: </strong> {{course.CrsAgenda}} </p>
+        <p class="card-text"> <strong>Grade: </strong> {{course.CrsSessions}} </p>
+      </div>
+    </div>
+  </div>
+</div>
+<br>
+<br>
+
+<div class="page-content page-container" id="page-content">
+  <div class="padding">
+    <div class="row container d-flex justify-content-center">
+      <div class="card" style="border-color:#635b50">
+        <div class="row">
+          <div class="col-sm-2" style="background-color:rgb(191, 225, 255)">
+            <div class="card-body">
+              <label class="Name">Code</label>
+            </div>
+          </div>
+          <div class="col-sm-2" style="background-color:aliceblue">
+            <div class="card-body">
+              <label class="Name">Name</label>
+            </div>
+          </div>
+          <div class="col-sm-2" style="background-color:rgb(191, 225, 255)">
+            <div class="card-body">
+              <label class="sessions">Sessions</label>
+            </div>
+          </div>
+          <div class="col-sm-2" style="background-color:aliceblue">
+            <div class="card-body">
+              <label class="duration">Duration</label>
+            </div>
+          </div>
+          <div class="col-sm-4" style="background-color:rgb(191, 225, 255)">
+            <div class="card-body">
+              <label class="Actions">Actions</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" *ngFor="let course of remainingCourses | searchfilter:searchText">
+        <div class="row">
+          <div class="col-sm-2" style="background-color:#fff5e2">
+            <div class="card-body">
+              <label class="Name">{{course.CrsCode}}</label>
+            </div>
+          </div>
+          <div class="col-sm-2" style="background-color: rgb(255, 253, 253);">
+            <div class="card-body">
+              <label class="Name">{{course.CrsName}}</label>
+            </div>
+          </div>
+          <div class="col-sm-2" style="background-color: #fff5e2">
+            <div class="card-body">
+              <label class="Sessions">{{course.CrsSessions}}</label>
+            </div>
+          </div>
+          <div class="col-sm-2" style="background-color: rgb(255, 253, 253);">
+            <div class="card-body">
+              <label class="Duration">{{course.CrsDuration}}</label>
+            </div>
+          </div>
+          <div class="col-sm-4" style="background-color: #fff5e2">
+            <div class="card-body">
+              <label class="Actions"></label>
+                <div class="button-group">
+                  <button class="editing btn" data-bs-toggle="modal" data-bs-target="#ModalEditCourse"
+                    (click)="onEdit(course)">
+                    <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" title="Edit"
+                      data-bs-placement="bottom"></i>
+                  </button>
+                  <button class="delete btn" (click)="deleteACourse(course)" data-bs-toggle="modal"
+                    data-bs-target="#ModalDeleteCourse">
+                    <i class="fa fa-trash-o" aria-hidden="true" data-bs-toggle="tooltip" title="Delete"
+                      data-bs-placement="bottom"></i>
+                  </button>
+                  <button class="view btn" data-bs-toggle="modal" data-bs-target="#ModalViewCourse">
+                    <i class="fa fa-clock" aria-hidden="true" data-bs-toggle="tooltip" title="View Schedules"
+                      data-bs-placement="bottom"></i>
+                  </button>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<router-outlet></router-outlet> -->
+
+<!-- <div class="row row-cols-1 row-cols-md-3 g-3">
+  <div class="col" *ngFor="let ticket of tickets">
+    <div class="card">
+      <div class="card-header">
+        <h5 data-bs-toggle="tooltip" title= {{ticket.TicketID}} data-bs-placement="top">
+          <a class="courseheader"  style="text-decoration: none;">
+            <strong> {{ticket.TicketID}} </strong>
+          </a>
+        </h5>
+
+        <div class="dropdown">
+          <button class="more btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+          </button>
+          <ul class="dropdown-menu" style="padding: 2px 3px; min-width: 1px !important; float: inline-start">
+            <li class="button">
+              <button class="btn dropdown-item dropbutton" data-bs-toggle="modal"
+                data-bs-target="#ModalEditCourse" >
+                <i class="fa fa-edit" aria-hidden="true" data-bs-toggle="tooltip" title="Edit"
+                  data-bs-placement="bottom"></i>
+              </button>
+            </li>
+           
+            <li class="button">
+              <button class="btn dropdown-item dropbutton" >
+                <i class="fa fa-trash-o" aria-hidden="true" data-bs-toggle="tooltip" title="Edit"
+                  data-bs-placement="bottom"></i>
+              </button>
+            </li>
+            <li class="button">
+              <button class="btn dropdown-item dropbutton" routerLink="/courseschedule" data-bs-toggle="modal"
+                data-bs-target="#ModalViewCourse">
+                <i class="fa fa-clock" aria-hidden="true" data-bs-toggle="tooltip" title="Edit"
+                  data-bs-placement="bottom"></i>
+              </button>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      <div class="card-body">
+        <p class="card-text"> <strong>Description: </strong> {{ticket.TicketID}} </p>
+        <p class="card-text"> <strong>What you'll learn: </strong> {{ticket.TicketID}} </p>
+        <p class="card-text"> <strong>Grade: </strong> {{ticket.TicketID}} </p>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+  <!-- <div class="card" style="width: 18rem;" *ngFor = "let ticket of sagar" >
+    <div class="card-header">
+      {{ticket.Status}}
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item">An item</li>
+      <li class="list-group-item">A second item</li>
+      <li class="list-group-item">A third item</li>
+    </ul>
+  </div> -->
+
+
+

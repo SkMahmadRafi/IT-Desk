@@ -1,0 +1,235 @@
+<div class="container-fluid">
+    <div class="hdr">
+      <h3 class="hrText">Change Request Form</h3>
+      <i class="bi bi-house"></i>
+    </div>
+  
+    <div>
+      <form [formGroup]="addTicketFormGroup">
+  
+        <div class="tktNum ">
+          <label class="col-5" for="ticketNumber">Ticket Number</label>
+          <input class="col-md-6" style="margin-left: 10px;" formControlName="ticketNumber">
+        </div>
+        <!-- <br> <br> -->
+        <div class="row" style="padding: 1.5%;"></div>
+  
+        <div class="gnrInfo">
+          <h6>GENERAL INFORMATION</h6>
+        </div>
+  
+  
+        <div class="generalInfo">
+          <div class="marginTop row justify-content-evenly">
+            <div class="inline1 col-md-4 ">
+              <label class="leftMarging col-4" for="empID">Emp ID</label>
+              <input style="margin-left: 10px; " formControlName="empID">
+            </div>
+  
+            <div class=" inline2 col-md-4">
+              <label class="leftMarging col-4" for="createdBy">Created By</label>
+              <input style="margin-left: 10px;" formControlName="createdBy">
+            </div>
+          </div>
+  
+          <div class="marginTop row justify-content-evenly">
+            <div class="inline1 col-md-4">
+              <label class="leftMarging col-4" for="createdOn">Created On</label>
+              <input style="margin-left: 10px;" formControlName="createdOn">
+            </div>
+  
+            <div class=" inline2 col-md-4">
+              <label class="leftMarging col-4" for="SME_Assigned">SME Assigned</label>
+  
+              <input style="margin-left: 10px;" list="europe-countries" formControlName="SME_Assigned"
+                placeholder="Start typing...">
+            </div>
+          </div>
+          <div class="marginTop row justify-content-evenly">
+            <div class=" inline1 col-md-4">
+              <label class="leftMarging col-4" for="approverName">Approver Name</label>
+  
+              <input style="margin-left: 10px;" list="europe-countries" formControlName="approverName"
+                placeholder="Start typing...">
+            </div>
+            <div class=" inline2 col-md-4">
+  
+            </div>
+          </div>
+          <datalist id="europe-countries">
+            <option>Russia</option>
+            <option>Germany</option>
+            <option>United Kingdom</option>
+  
+          </datalist>
+        </div>
+        <br>
+  
+        <div class="gnrInfo">
+          <h6>CHANGE REQUEST DETAILS</h6>
+        </div>
+  
+        <div class="changeRequest">
+          <div class="marginTop row justify-content-evenly">
+            <!-- <div class="inline1 col-md-4 ">
+              <label class="leftMarging" for="type">Type</label>
+              <input style="margin-left: 10px;" formControlName="type">
+            </div> -->
+  
+            <div class=" inline1 col-md-4">
+              <label class="leftMarging col-4" for="type">Type</label>
+  
+              <input style="margin-left: 10px;" list="europe-countries" formControlName="type"
+                placeholder="Start typing...">
+            </div>
+  
+            <div class=" inline2 col-md-4">
+              <label class="leftMarging col-4" for="priority">Priority</label>
+  
+              <input style="margin-left: 10px;" list="europe-countries" formControlName="priority"
+                placeholder="Start typing...">
+            </div>
+  
+            <!-- <div class=" inline2 col-md-4">
+              <label class="leftMarging" for="priority">Priority</label>
+              <input style="margin-left: 10px;" formControlName="priority">
+            </div> -->
+          </div>
+  
+          <div class="marginTop row justify-content-evenly">
+            <!-- <div class="inline1 col-md-4">
+              <label class="leftMarging" for="selectDevice">Select Device Type</label>
+              <input style="margin-left: 10px;" formControlName="selectDevice">
+            </div> -->
+  
+            <div class=" inline1 col-md-4">
+              <label class="leftMarging col-4" for="selectDevice">Select Device Type</label>
+  
+              <input style="margin-left: 10px;" list="europe-countries" formControlName="selectDevice"
+                placeholder="Start typing...">
+            </div>
+  
+            <div class=" inline2 col-md-4">
+              <label class="leftMarging col-4" for="siteName">Site Name</label>
+  
+              <input style="margin-left: 10px;" list="europe-countries" formControlName="siteName"
+                placeholder="Start typing...">
+            </div>
+          </div>
+          <div class="marginTop row justify-content-evenly">
+            <!-- <div class="inline1 col-md-4">
+              <label class="leftMarging" for="devices">Devices</label>
+              <input style="margin-left: 10px;" formControlName="devices">
+            </div> -->
+  
+            <div class=" inline1 col-md-4">
+              <label class="leftMarging col-4" for="devices">Devices</label>
+  
+              <input style="margin-left: 10px;" list="europe-countries" formControlName="devices"
+                placeholder="Start typing...">
+            </div>
+  
+  
+            <div class=" inline2 col-md-4">
+              <label class="leftMarging col-4" for="location">Location</label>
+  
+              <input style="margin-left: 10px;" list="europe-countries" formControlName="location"
+                placeholder="Start typing...">
+            </div>
+          </div>
+          <div class="marginTop row justify-content-evenly">
+            <div class="inline1 col-md-4">
+  
+              <label class="leftMarging col-4" for="implementTime">Implement Time</label>
+              <input style="margin-left: 10px;" type="time" formControlName="implementTime">
+  
+  
+            </div>
+  
+            <div class=" inline2 col-md-4">
+  
+              <label class="leftMarging col-4" for="scheduledDate">Scheduled Date</label>
+              <input style="margin-left: 10px;" type="date" formControlName="scheduledDate">
+  
+            </div>
+          </div>
+        </div>
+        <br>
+  
+        <div class="gnrInfo">
+          <h6>PLANNING</h6>
+        </div>
+  
+        <div class="Planning">
+          <div class="row mt-4 justify-content-center">
+            <label class="col-md-2 align-self-center" for="businessJustification">Business Justification</label>
+            <textarea class="col-md-8 " name="businessJustification" rows="3" cols="50"
+              formControlName="businessJustification"></textarea>
+          </div>
+          <div class="row mt-4 justify-content-center">
+            <label class="col-md-2 align-self-center" for="CMRdescre">CMR Description</label>
+            <textarea class="col-md-8 " name="CMRdescre" rows="3" cols="50" formControlName="CMRdescre"></textarea>
+          </div>
+          <div class="row mt-4 justify-content-center">
+            <label class="col-md-2 align-self-center" for="riskImpact">Risk/Impact</label>
+            <textarea class="col-md-8 " name="riskImpact" rows="3" cols="50" formControlName="riskImpact"></textarea>
+          </div>
+          <div class="row mt-4 justify-content-center">
+            <label class="col-md-2 align-self-center" for="actionPlan">Action Plan</label>
+            <textarea class="col-md-8 " name="actionPlan" rows="3" cols="50" formControlName="actionPlan"></textarea>
+          </div>
+          <div class="row mt-4 justify-content-center">
+            <label class="col-md-2 align-self-center" for="rollbackPlan">Roll-back Plan</label>
+            <textarea class="col-md-8 " name="rollbackPlan" rows="3" cols="50" formControlName="rollbackPlan"></textarea>
+          </div>
+        </div>
+        <br>
+  
+        <div class="gnrInfo">
+          <h6>NOTE</h6>
+        </div>
+        <div class="note">
+          <div class=" mt-4 ">
+            <div class="row justify-content-center">
+              <label class="col-md-11" for="note">Please Mention Relevant Incident or Problem Number Triggering the
+                Change</label>
+              <textarea class="col-md-10 mt-2 " name="note" rows="3" cols="50" formControlName="note"></textarea>
+              <div class="col-md-11 mt-2">
+                <label for="">Do you need to take a backup of the server / Network device configuration before the
+                  change?</label>
+                <div>
+                  <input type="radio" class="form-check-input margin" id="radio1" name="optradio" value="option1">
+                  <label class="form-check-label " for="radio1">YES</label>
+                  <input type="radio" class="form-check-input margin" id="radio2" name="optradio" value="option2">
+                  <label class="form-check-label " for="radio2">NO</label>
+                </div>
+              </div>
+              <div class="col-md-11 mt-2">
+                <label for="">Is there any downtime involved for end-users ? </label>
+                <div>
+                  <input type="radio" class="form-check-input margin" id="radio1" name="optradio" value="option1">
+                  <label class="form-check-label " for="radio1">YES</label>
+                  <input type="radio" class="form-check-input margin" id="radio2" name="optradio" value="option2">
+                  <label class="form-check-label " for="radio2">NO</label>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+  
+  
+  
+        </div>
+        <br>
+        <!-- <input class="ListCode" placeholder="LIstCode" class="textWidth" formControlName="listMstCode">
+        <input placeholder="MstDescr" class="textWidth" formControlName="mstDescr"> -->
+        
+        <div style="float: right;">
+          <button type="button" class="btn btn-danger" >Cancel</button>
+        <button class="btn btn-primary" style="margin: 10px;" 
+          [disabled]="!addTicketFormGroup.valid">Submit</button>
+        </div>
+  
+      </form>
+    </div>
+  </div>

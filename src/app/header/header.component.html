@@ -1,0 +1,133 @@
+<!-- <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <button type="button hamburger" class="menu btn btn-md " data-bs-toggle="modal" data-bs-target="#offcanvasExample">  
+          <i class="fa fa-bars fa-lg" aria-hidden="true" style="color:antiquewhite"></i>      
+        </button>
+        
+        <div class="side-nav-button p-2 me-3 text-light" data-bs-toggle="modal" data-bs-target="#offcanvasScrolling" >
+          <i class="fa fa-bars"></i>
+         </div> -->
+          
+         
+
+         <div class="sidebar-nav" >
+          <nav class="navbar navbar-dark bg-secondary fixed-top">
+            
+            
+              <div class="container-fluid">
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" >
+                  <span class="navbar-toggler-icon" *ngIf="showMe"></span>
+                </button>
+
+                  
+              
+
+                  <div class="image arrange">
+                    <!-- <img src="assets/images/MicrosoftTeams-image.png" style="width: auto; height: 60px;">  -->
+                    
+                    
+                  </div>
+                  <div class="arrange">
+                    <button  (click)="login()">login</button>
+                  <button class="mr-2" (click)="logout()">logout</button>
+                  </div>
+                  
+                 <!-- <div class="move">
+                    <h1>IT Desk</h1>
+                 </div> -->
+                  
+                
+
+                  <div class="icon">
+                    <button class="btn btn-lg" (click)="login()" *ngIf="!isLoggedIn()" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-box-arrow-in-right"></i></button>
+                  
+                    <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                      *ngIf="isLoggedIn()">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                      </button>
+                      <ul class="dropdown-menu pull-right" style="right: 0; left: auto;">
+                        <li class="profile"><a class="dropdown-item" href="#"></a>{{profile.name}}</li>
+                        <li class="pro"><a class="dropdown-item" href="#"></a>{{profile.username}}</li>
+                        <!-- <li><a class="dropdown-item" href="#">Something else here</a></li> -->
+                          <button class="btn btn-lg" (click)="logout()" (click)="toggleTag()"><i class="bi bi-box-arrow-left"></i></button>  
+                      </ul>
+                    </div>
+                    <!-- <ul class="dropdown-menu">
+                      <li><a class="dropdown-item" href="#">Action</a></li>
+                      <li><a class="dropdown-item" href="#">Another action</a></li>
+                      <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul> -->
+                    <!-- <button class="btn btn-lg" (click)="logout()" (click)="toggleTag()"><i class="bi bi-box-arrow-left"></i></button>  -->
+
+                    <!-- <div class="dropdown">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown button
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                      </ul>
+                    </div> -->
+                  </div>
+                 
+                 
+                  <div class="offcanvas offcanvas-start shadow" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" aria-label="Close">
+                    <div class="offcanvas-body">
+                          <ul class="navbar-nav"  data-bs-dismiss="container-fluid">
+                              <li><a routerLink=""><i class="bi bi-calendar3"></i> <span class="item-text">Dashboard</span></a></li>
+                              
+                              <li><a routerLink="new_request"><i class="bi bi-people"></i> <span class="item-text">New Request</span></a></li>
+                              <li *ngIf="manager"><a  routerLink="emp"><i class="bi bi-book"></i> <span class="item-text" >Employee</span></a></li>
+                          </ul>
+                    </div>
+                  </div>
+        
+                
+        
+              </div>
+          </nav>
+        </div> 
+        
+      <br>
+      <br>
+      <br>  
+
+      
+        
+         <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#" style="color: white;">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#" style="color: white;">About</a>
+          </li>
+         
+        </ul>
+       
+      </div>
+    </div>
+  </nav> -->
+
+    
+    
+    
+ 
+    
+    
+  
+
+
+
+   
+
+
+
