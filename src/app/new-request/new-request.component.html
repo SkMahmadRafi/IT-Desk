@@ -308,7 +308,7 @@
                             </div>
 
                         </div>
-                        <div *ngIf="manager" class="mt-2 padLeft">
+                        <!-- <div *ngIf="manager" class="mt-2 padLeft">
                             <label for="managerApprove">Would you like to approve or reject</label>
                             <div class="row">
                                 <div class="col-md-3">
@@ -321,14 +321,14 @@
                             </div>
                                                           
                            
-                        </div>
+                        </div> -->
                         <div  *ngIf="managerReject" class="row justify-content-center mb-2 mb-2">
                             <label class="col-md-11" for="note">Please mention the reason for rejection</label>
                             <textarea class="col-md-10 mt-2 " name="note" rows="3" cols="50"
                                 formControlName="note"></textarea>
 
                         </div>
-                        <div *ngIf="CABmanager" class="mt-2 padLeft">
+                        <!-- <div *ngIf="CABmanager" class="mt-2 padLeft">
                             <label for="managerApprove">Would you like to approve or reject</label>
                             <div class="row">
                                 <div class="col-md-3">
@@ -341,7 +341,7 @@
                             </div>
                                                           
                            
-                        </div>
+                        </div> -->
                         <div *ngIf="CABrejected" class="row justify-content-center mb-2 mb-2">
                             <label class="col-md-11" for="note">Please mention the reason for rejection</label>
                             <textarea class="col-md-10 mt-2 " name="note" rows="3" cols="50"
@@ -383,9 +383,9 @@
                             <div class="submitBtn">
                                 <!-- [disabled]="!addTicketFormGroup.valid" -->
                                 <button class="btn btn-primary" style="margin: 10px;" routerLink=""
-                                    (click)="sendNewRequest()">Submit</button>
+                                    (click)="sendNewRequest()" >Submit</button>
                             </div>
-                        </div>
+                        </div>  
                         <div>
                            <br>
                            <br>

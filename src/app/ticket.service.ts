@@ -29,12 +29,83 @@ export class TicketService {
   getEmpDetails ()  {
    // this.user = "vishwas26@gmail.com";
  let employee = {empemailid : "mahamad.rafi@jktech.com"} ;
-   //let employee = {empemailid : "mallikarjun.managavi@jktech.com"};
-  //let employee = {empemailid : "thummana.pavani@jktech.com"};
-    debugger;
+ //  let employee = {empemailid : "mallikarjun.managavi@jktech.com"};
+ // let employee = {empemailid : "thummana.pavani@jktech.com"};
+   
    
    return this.http.post<any>('http://localhost:3000/EmpManager/empfilter' , employee
     )
+  }
+
+  getAllTickets () {
+    return this.http.get<any>('http://localhost:3000/RequestManager/allrequests')
+  }
+
+  getType () {
+    let listmstid = 5;
+    return this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid })
+  }
+
+  getPriority () {
+    let listmstid = 1;
+    return this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid })
+  }
+
+  getDeviceType () {
+    let listmstid = 2;
+    return  this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid })
+  }
+
+  filterTickets (filterPayLoad : any) {
+
+   return this.http.post<any>('http://localhost:3000/RequestManager/filter', filterPayLoad)
+
+  }
+
+  filteredTickets (filterPayLoad : any) {
+
+    return this.http.post<any>('http://localhost:3000/RequestManager/filter', filterPayLoad)
+
+  }
+
+  getRequestByID (ticket : any) {
+    return this.http.post<any>('http://localhost:3000/RequestManager/requestbyid' , ticket)
+  }
+
+  getDevices (data : any) {
+    let listmstid = data ;
+    
+    return this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid} )
+  }
+
+  getAllLocations () {
+    return  this.http.get<any>('http://localhost:3000/LocationManager')
+  }
+
+  getRequestStatuses () {
+    let listmstid = 6 ;
+   return this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid})
+  }
+
+  createRequest (addDraftRequestPayLoad : any) {
+    return this.http.post<any>('http://localhost:3000/RequestManager/createrequest' , addDraftRequestPayLoad)
+  }
+
+  updateRequest (updatePayLoad : any) {
+  return  this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , updatePayLoad)
+
+  }
+
+  mgrResponse (managerResponse : any) {
+    return this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , managerResponse)
+  }
+
+  CABresponse (CABresponse : any) {
+    return this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , CABresponse)
+  }
+
+  closeTicketById (closeTicketPayLoad : any) {
+   return this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , closeTicketPayLoad)
   }
 
   isLoggedIn():boolean{

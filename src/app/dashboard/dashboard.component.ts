@@ -81,90 +81,134 @@ export class DashboardComponent implements OnInit {
    //if (this.ticketService.loggedIn === true) {
    
   //  this.log = true;
+  
+ 
   this.some = setTimeout(() => {
     this.getAllRequest();
-  }, 100) ;
+  }, 300) ;
     
     this.getTypeDropdown();
     this.getPriorityDropdown();
     this.getDeviceTypeDropdown();
-   // this.empDetails();
-    // if (this.id != "") {
-    //    this.getTicketById(this.id);
-    // }
- // }
+  // this.empDetails();
+   
+//    if (this.id != "") {
+//     this.getTicketById(this.id);
+//  }
+
   }
 
 
 
-  getAllRequest(): void {
-    this.http.get<any>('http://localhost:3000/RequestManager/allrequests'
-    ).subscribe(
+  // getAllRequest(): void {
+  //   this.http.get<any>('http://localhost:3000/RequestManager/allrequests'
+  //   ).subscribe(
+  //     response => {
+  //       this.tickets = response.result;
+        
+        
+  //       if (this.ticketService.filtered === true) {
+  //         this.getFlteredRecords();
+  //       }
+        
+
+  //     }
+  //   );
+  // }
+
+  getAllRequest () {
+    
+    this.ticketService.getAllTickets().subscribe(
       response => {
         this.tickets = response.result;
-        console.log("tickets ", this.tickets);
         
         if (this.ticketService.filtered === true) {
-          this.getFlteredRecords();
-        }
+                  this.getFlteredRecords();
+                 }
+      }
+    );
+  }
+
+  // empDetails () { not required
+    
+  //   this.ticketService.getEmpDetails().subscribe(
+  //     response => {
+  //       this.empResponse = response.result;
         
 
-      }
-    );
-  }
-
-  empDetails () {
-    
-    this.ticketService.getEmpDetails().subscribe(
-      response => {
-        this.empResponse = response.result;
-        console.log("empRespom", this.empResponse);
-
-     if (this.empResponse[0].emplevel === "Manager") {
-      this.manager = true;
+  //    if (this.empResponse[0].emplevel === "Manager") {
+  //     this.manager = true;
       
-   }
-      }
-    );
-  }
+  //  }
+  //     }
+  //   );
+  // }
 
-  getTypeDropdown(): void {
-    let listmstid = 5;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid }
-    ).subscribe(
+  // getTypeDropdown(): void {
+  //   let listmstid = 5;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid }
+  //   ).subscribe(
+  //     response => {
+  //       this.typeList = response.result;
+        
+
+
+
+  //     }
+  //   );
+  // }
+
+  getTypeDropdown () {
+
+    this.ticketService.getType().subscribe(
       response => {
         this.typeList = response.result;
-        console.log("addMstResponse", this.typeList);
-
-
-
       }
     );
+
   }
 
-  getPriorityDropdown(): void {
-    let listmstid = 1;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid }
-    ).subscribe(
+
+  // getPriorityDropdown(): void {
+  //   let listmstid = 1;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid }
+  //   ).subscribe(
+  //     response => {
+  //       this.priorityList = response.result;
+        
+
+  //     }
+  //   );
+  // }
+
+  getPriorityDropdown () {
+    this.ticketService.getPriority().subscribe(
       response => {
         this.priorityList = response.result;
-        console.log("addMstResponse", this.typeList);
-
       }
     );
   }
 
-  getDeviceTypeDropdown(): void {
-    let listmstid = 2;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid }
-    ).subscribe(
+  // getDeviceTypeDropdown(): void {
+  //   let listmstid = 2;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID', { listmstid }
+  //   ).subscribe(
+  //     response => {
+  //       this.deviceTypeList = response.result;
+        
+
+  //     }
+  //   );
+  // }
+
+  getDeviceTypeDropdown () {
+    this.ticketService.getDeviceType().subscribe(
       response => {
         this.deviceTypeList = response.result;
-        console.log("addMstResponse", this.typeList);
-
       }
     );
   }
+
   enableDisbaleEdit(createdName: any, reqStatus: any , approver : any , ticketStatus : any): void {
     
      
@@ -172,13 +216,22 @@ export class DashboardComponent implements OnInit {
     (createdName === this.ticketService.empDetails[0].empemailid && reqStatus === "Manager Rejected")) {
       this.edit = true;
       this.ticketService.view = false;
+      console.log("draft or reject");
      
       
 
     }
+    else if ((createdName === this.ticketService.empDetails[0].empemailid )&&(reqStatus === "CAB Rejected")) {
+      this.edit = true;
+      this.ticketService.view = true;
+      console.log("createdName" , createdName ,this.ticketService.empDetails[0].empemailid )
+      console.log("reqStatus" , reqStatus);
+     
+    }
     else if ((createdName === this.ticketService.empDetails[0].empemailid && reqStatus === "CAB Approved") && ticketStatus === "open") {
       this.edit = true;
       this.ticketService.view = true;
+      console.log("draft or reject");
     }
   else if ( this.ticketService.empDetails[0].empemailid === approver ) {
       this.edit = true;
@@ -205,55 +258,95 @@ export class DashboardComponent implements OnInit {
     //let searchValue1 = document.getElementById("SearchBar").text();
     //let searchValue1 = (<HTMLInputElement>document.getElementById("SearchBar")).value; 
     this.searchValue = (<HTMLInputElement>document.getElementById("SearchBar")).value;
-    console.log(this.searchValue);
+    
   }
 
-  filterRecords(): void {
+  // filterRecords(): void {
+  //   this.ticketService.filtered = true ;
+  //   this.ticketService.filterChangeType = this.searchFormGroup.controls['changeType'].value;
+  //   this.ticketService.filterPriority = this.searchFormGroup.controls['priority'].value;
+  //   this.ticketService.filterDeviceType = this.searchFormGroup.controls['deviceType'].value;
+  //   this.ticketService.filterstatus = this.searchFormGroup.controls['status'].value;
+
+  //   let filterPayLoad = {
+  //     type: this.ticketService.filterChangeType,
+  //     priority: this.ticketService.filterPriority,
+  //     reqstatus: this.ticketService.filterDeviceType,
+  //     devicetype: this.ticketService.filterstatus
+  //   };
+    
+
+  //   this.http.post<any>('http://localhost:3000/RequestManager/filter', filterPayLoad
+  //   ).subscribe(
+  //     response => {
+  //       this.tickets = response.result;
+        
+
+  //     }
+  //   );
+
+
+  // }
+
+  filterRecords () {
+
     this.ticketService.filtered = true ;
-    this.ticketService.filterChangeType = this.searchFormGroup.controls['changeType'].value;
-    this.ticketService.filterPriority = this.searchFormGroup.controls['priority'].value;
-    this.ticketService.filterDeviceType = this.searchFormGroup.controls['deviceType'].value;
-    this.ticketService.filterstatus = this.searchFormGroup.controls['status'].value;
+      this.ticketService.filterChangeType = this.searchFormGroup.controls['changeType'].value;
+      this.ticketService.filterPriority = this.searchFormGroup.controls['priority'].value;
+      this.ticketService.filterDeviceType = this.searchFormGroup.controls['deviceType'].value;
+      this.ticketService.filterstatus = this.searchFormGroup.controls['status'].value;
+  
+      let filterPayLoad = {
+        type: this.ticketService.filterChangeType,
+        priority: this.ticketService.filterPriority,
+        reqstatus: this.ticketService.filterDeviceType,
+        devicetype: this.ticketService.filterstatus
+      };
 
-    let filterPayLoad = {
-      type: this.ticketService.filterChangeType,
-      priority: this.ticketService.filterPriority,
-      reqstatus: this.ticketService.filterDeviceType,
-      devicetype: this.ticketService.filterstatus
-    };
-    
-
-    this.http.post<any>('http://localhost:3000/RequestManager/filter', filterPayLoad
-    ).subscribe(
-      response => {
-        this.tickets = response.result;
-        console.log("tickets", this.tickets);
-
-      }
-    );
-
+      this.ticketService.filterTickets(filterPayLoad).subscribe(
+        response => {
+          this.tickets = response.result;
+        }
+      );
 
   }
 
-  getFlteredRecords(): void {
+  // getFlteredRecords(): void {
     
+  //   let filterPayLoad = {
+  //     type: this.ticketService.filterChangeType,
+  //     priority: this.ticketService.filterPriority,
+  //     reqstatus: this.ticketService.filterDeviceType,
+  //     devicetype: this.ticketService.filterstatus
+  //   };
+    
+
+  //   this.http.post<any>('http://localhost:3000/RequestManager/filter', filterPayLoad
+  //   ).subscribe(
+  //     response => {
+  //       this.tickets = response.result;
+        
+
+  //     }
+  //   );
+
+
+  // }
+
+  getFlteredRecords () {
+
     let filterPayLoad = {
-      type: this.ticketService.filterChangeType,
-      priority: this.ticketService.filterPriority,
-      reqstatus: this.ticketService.filterDeviceType,
-      devicetype: this.ticketService.filterstatus
-    };
-    
+          type: this.ticketService.filterChangeType,
+          priority: this.ticketService.filterPriority,
+          reqstatus: this.ticketService.filterDeviceType,
+          devicetype: this.ticketService.filterstatus
+        };
 
-    this.http.post<any>('http://localhost:3000/RequestManager/filter', filterPayLoad
-    ).subscribe(
-      response => {
-        this.tickets = response.result;
-        console.log("tickets", this.tickets);
-
-      }
-    );
-
+        this.ticketService.filteredTickets(filterPayLoad).subscribe(
+          response => {
+            this.tickets = response.result;
+          }
+        );
 
   }
 
@@ -289,20 +382,33 @@ export class DashboardComponent implements OnInit {
     this.searchFormGroup.controls.status.setValue(this.ticketService.filterstatus);
   }
 
-  getTicketById (ticketId : any) : void {
+  // getTicketById (ticketId : any) : void {
     
-    let ticket = {requestid : ticketId}
-    this.http.post<any>('http://localhost:3000/RequestManager/requestbyid' , ticket
-    ).subscribe(
-      response => {
-        this.tickets = response.result;
-        console.log("TicketDetails", this.tickets);
+  //   let ticket = {requestid : ticketId}
+  //   this.http.post<any>('http://localhost:3000/RequestManager/requestbyid' , ticket
+  //   ).subscribe(
+  //     response => {
+  //       this.tickets = response.result;
+        
         
        
   
+  //     }
+  //   );
+  // }
+
+  getTicketById (ticketId : any) {
+    let ticket = {requestid : ticketId}
+
+    this.ticketService.getRequestByID(ticket).subscribe(
+      response => {
+        this.tickets = response.result;
       }
     );
+
   }
+
+
 
 }
 

@@ -131,7 +131,7 @@ export class NewRequestComponent implements OnInit{
   // }
  
  // now = new Date();
-  //SystemDate : any = this.datepipe.transform(this.now, 'dd/MM/YYYY');
+  //SystemDate : any = this.datepipe.transformconsole(this.now, 'dd/MM/YYYY');
 //  SystemDate : any = this.datepipe.transform(this.now, 'MM/dd/YYYY');
 
   getDate () {
@@ -154,11 +154,10 @@ export class NewRequestComponent implements OnInit{
     this.addTicketFormGroup.controls['createdBy'].setValue(this.ticketService.empDetails[0].empemailid);
     this.addTicketFormGroup.controls['approverName'].setValue(this.ticketService.empDetails[0].mgremailid);
     this.addTicketFormGroup.controls['type'].setValue("Normal");
+    this.addTicketFormGroup.controls['priority'].setValue("Low");
    // 
    // this.addTicketFormGroup.controls['scheduledDate'].setValue(this.SystemDate);
    this.setScheduletDate = this.SystemDate;
-    
-    
     this.addTicketFormGroup.controls['selectDevice'].setValue(this.ticketService.empDetails[0].device);
     this.addTicketFormGroup.controls['requestStatus'].setValue("New Request");
     
@@ -199,42 +198,75 @@ export class NewRequestComponent implements OnInit{
   //   );
   // }
 
-  getTypeDropdown () : void {
-    let listmstid = 5 ;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
+
+
+
+
+
+
+  // getTypeDropdown () : void {
+  //   let listmstid = 5 ;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
+  //       this.typeList = response.result;
+        
+     
+  //     }
+  //   );
+  // }
+
+  getTypeDropdown () {
+
+    this.ticketService.getType().subscribe(
       response => {
         this.typeList = response.result;
-        console.log("addMstResponse", this.typeList);
-     
       }
     );
+
   }
 
-  getPriorityDropdown () : void {
-    let listmstid = 1 ;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
-      response => {
+  // getPriorityDropdown () : void {
+  //   let listmstid = 1 ;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
         
       
-          this.priorityList = response.result;
-        console.log("addMstResponse", this.priorityList);
+  //         this.priorityList = response.result;
+        
        
+  //     }
+  //   );
+  // }
+
+  getPriorityDropdown () {
+
+    this.ticketService.getPriority().subscribe(
+      response => {
+        this.priorityList = response.result;
       }
     );
   }
 
-  getDeviceTypeDropdown () : void {
+  // getDeviceTypeDropdown () : void {
     
-    let listmstid = 2 ;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
+  //   let listmstid = 2 ;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
+  //       this.deviceTypeList = response.result;
+      
+       
+  //     }
+  //   );
+  // }
+
+
+  getDeviceTypeDropdown () {
+    this.ticketService.getDeviceType().subscribe(
       response => {
         this.deviceTypeList = response.result;
-        console.log("devicetypeList", this.typeList);
-        debugger
-       
       }
     );
   }
@@ -250,48 +282,79 @@ export class NewRequestComponent implements OnInit{
   //   );
   // }
 
-  getDevicesDropdown (data : any) : void {
-    let listmstid = data ;
+  // getDevicesDropdown (data : any) : void {
+  //   let listmstid = data ;
     
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
+  //       this.deviceList = response.result;
+       
+  //     }
+  //   );
+  // }
+
+  getDevicesDropdown (data : any) {
+    this.ticketService.getDevices(data).subscribe(
       response => {
         this.deviceList = response.result;
-       
       }
     );
   }
 
-  getLocationDropdown() : void {
-    debugger
-    this.http.get<any>('http://localhost:3000/LocationManager'
-    ).subscribe(
+
+  // getLocationDropdown() : void {
+    
+  //   this.http.get<any>('http://localhost:3000/LocationManager'
+  //   ).subscribe(
+  //     response => {
+  //       this.locationList = response.result;
+  //       this.siteNameList = this.locationList;
+       
+  //     }
+  //   );
+  // }
+
+  getLocationDropdown() {
+    this.ticketService.getAllLocations().subscribe(
       response => {
         this.locationList = response.result;
         this.siteNameList = this.locationList;
-       
       }
     );
   }
 
-  getRequestDropdown () : void {
+  
+
+  // getRequestDropdown () : void {
     
-    let listmstid = 6 ;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
-      response => {
-        this.reqDropdown = response.result;
-        console.log("addMstResponse", this.reqDropdown);
+  //   let listmstid = 6 ;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
+  //       this.reqDropdown = response.result;
+      
         
      
+  //     }
+  //   );
+  // }
+
+  getRequestDropdown () {
+
+    this.ticketService.getRequestStatuses().subscribe(
+      response => {
+        this.reqDropdown = response.result;
+        
       }
     );
+
   }
 
   transFormDate (date:any) {
     
     let givenDate = date.split('-')
-    console.log(givenDate);
+  
     let TransformedDate = givenDate[0] + "/" + givenDate[1] + "/" + givenDate[2];
     return TransformedDate;
   }
@@ -305,7 +368,7 @@ export class NewRequestComponent implements OnInit{
     //this.createdOn = this.addTicketFormGroup.controls['createdOn'].value?.split('/');
     //this.CreatedDate = this.createdOn[0] + "/" + this.createdOn[1] + "/" + this.createdOn[2];
     this.CreatedDate = this.addTicketFormGroup.controls['createdOn'].value
-    console.log("date@" , this.CreatedDate)
+    
     this.SME_Assigned = this.addTicketFormGroup.controls['SME_Assigned'].value;
     this.approverName = this.addTicketFormGroup.controls['approverName'].value;
     this.type = this.addTicketFormGroup.controls['type'].value;
@@ -326,7 +389,9 @@ export class NewRequestComponent implements OnInit{
     this.note = this.addTicketFormGroup.controls['note'].value;
     this.backupDate = this.addTicketFormGroup.controls['backupDate'].value;
  // this.backupDate = "03/30/2023";
+ 
     this.notifyEndUser = this.addTicketFormGroup.controls['notifyEndUser'].value;
+    
     this.verbalApproval = this.addTicketFormGroup.controls['verbalApproval'].value;
     this.email = this.addTicketFormGroup.controls['email'].value;
   
@@ -337,16 +402,39 @@ export class NewRequestComponent implements OnInit{
     //   scheduleddate:this.scheduledDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
     //   cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
     //   relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
-
-       console.log(this.addTicketData);
        //let checkbox = document.getElementById("flexSwitchCheckDefault");
        
   }
 
-  sendDraftRequest () : void {
+  // sendDraftRequest () : void {
     
 
-    this.makePostTicketPayLoad();
+  //   this.makePostTicketPayLoad();
+
+  //   this.RequestStatus = "Draft";
+
+  //   this.addTicketData = {ticketNumber:this.ticketNumber , empid:this.empID , createdby:this.createdBy ,
+  //     createddate:this.CreatedDate ,smeemailid:this.SME_Assigned , approveremail:this.approverName ,
+  //     type:this.type,priority:this.priority,devicetype:this.selectDevice,sitename:this.siteName,
+  //     device:this.devices,location:this.location,implemettime:this.implementTime,
+  //     scheduleddate:this.scheduleDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
+  //     cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
+  //     relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
+  //     console.log("this.adddraftTicketData" , this.addTicketData);
+
+  //     this.http.post<any>('http://localhost:3000/RequestManager/createrequest' , this.addTicketData
+  //   ).subscribe(
+  //     response => {
+  //       this.postTicketResponse = response;
+        
+        
+  //     }
+  //   );
+  // }
+
+  sendDraftRequest () {
+
+  this.makePostTicketPayLoad();
 
     this.RequestStatus = "Draft";
 
@@ -357,21 +445,47 @@ export class NewRequestComponent implements OnInit{
       scheduleddate:this.scheduleDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
       cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
       relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
-      console.log("this.addTicketData" , this.addTicketData);
+      console.log("this.adddraftTicketData" , this.addTicketData);
 
-      this.http.post<any>('http://localhost:3000/RequestManager/createrequest' , this.addTicketData
-    ).subscribe(
-      response => {
-        this.postTicketResponse = response;
-        console.log("postTicketResponse", this.postTicketResponse);
-        
-      }
-    );
+      this.ticketService.createRequest(this.addTicketData).subscribe(
+        response => {
+          this.postTicketResponse = response;
+          
+        }
+      );
+
   }
 
 
-  sendNewRequest () : void {
+  // sendNewRequest () : void {
     
+
+  //   this.makePostTicketPayLoad();
+
+  //   this.RequestStatus = "New Request" ;
+
+  //   this.addTicketData = {ticketNumber:this.ticketNumber , empid:this.empID , createdby:this.createdBy ,
+  //     createddate:this.CreatedDate ,smeemailid:this.SME_Assigned , approveremail:this.approverName ,
+  //     type:this.type,priority:this.priority,devicetype:this.selectDevice,sitename:this.siteName,
+  //     device:this.devices,location:this.location,implemettime:this.implementTime,
+  //     scheduleddate:this.scheduleDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
+  //     cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
+  //     relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
+  //     console.log("sendnewRequestPayload" ,this.addTicketData );
+  //   this.http.post<any>('http://localhost:3000/RequestManager/createrequest' , this.addTicketData
+  //   ).subscribe(
+  //     response => {
+  //       this.postTicketResponse = response;
+        
+        
+  //     }
+  //   );
+       
+
+  // }
+
+
+  sendNewRequest () {
 
     this.makePostTicketPayLoad();
 
@@ -384,17 +498,13 @@ export class NewRequestComponent implements OnInit{
       scheduleddate:this.scheduleDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
       cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
       relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
-      console.log("postpayload" ,this.addTicketData );
-    this.http.post<any>('http://localhost:3000/RequestManager/createrequest' , this.addTicketData
-    ).subscribe(
-      response => {
-        this.postTicketResponse = response;
-        console.log("postTicketResponse", this.postTicketResponse);
-        
-      }
-    );
-       
 
+      this.ticketService.createRequest(this.addTicketData).subscribe(
+        response => {
+          this.postTicketResponse = response;
+          
+        }
+      );
   }
 
   getCheckboxResponse1() : void {
@@ -405,10 +515,11 @@ export class NewRequestComponent implements OnInit{
       this.backup = 1 ;
      // this.addTicketFormGroup.controls['backupDate'].setValue(this.SystemDate);
      this.setBackupDate = this.SystemDate;
+     
     }
     else {
       this.backupDate = false;
-      this.backup = 0 ;
+      this.backup = 0 ; 
      // this.addTicketFormGroup.controls['backupDate'].setValue("");
      this.setBackupDate = "";
     }
@@ -449,28 +560,28 @@ export class NewRequestComponent implements OnInit{
   }
 
 
-  managerResponse (value:any) : void {
-    this.managerRespon = value
-    if (value === "Approve"){
-      this.managerReject = false;
-    }
-    else {
-      this.managerReject = true;
-    }
+  // managerResponse (value:any) : void {
+  //   this.managerRespon = value
+  //   if (value === "Approve"){
+  //     this.managerReject = false;
+  //   }
+  //   else {
+  //     this.managerReject = true;
+  //   }
     
-  }
+  // }
 
  
 
-  CABresponse(value:any) : void {
-    this.CABrespon = value
-    if (value === "Approve"){
-      this.CABrejected = false;
-    }
-    else {
-      this.CABrejected = true;
-    }
-  }
+  // CABresponse(value:any) : void {
+  //   this.CABrespon = value
+  //   if (value === "Approve"){
+  //     this.CABrejected = false;
+  //   }
+  //   else {
+  //     this.CABrejected = true;
+  //   }
+  // }
 
   selectedDeviceType(value : any) : void{
     

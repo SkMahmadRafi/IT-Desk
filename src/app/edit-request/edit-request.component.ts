@@ -27,13 +27,45 @@ export class EditRequestComponent implements OnInit {
     this.getTicketDetailsById();
     this.getLocationDropdown();
     this.selectedDeviceType("dummy");
-    if (this.ticketService.view === true) {
-      
-    this.disableAll ();
-    }
+   
   }
   
 
+
+  // editTicketFormGroup = this.formBuilder.group({
+  //   ticketNumber: [{value :'' , disabled : true }],
+  //   empID: [{value :'' , disabled : true }],
+  //   createdBy: [''],
+  //   createdOn: [{value :'' , disabled : true }],
+  //   SME_Assigned: [{value :'' , disabled : true }],
+  //   approverName: [{value :'' , disabled : true }],
+  //   type: ['', Validators.required ,],
+  //   priority: ['', Validators.required],
+  //   selectDevice: ['', Validators.required],
+  //   siteName: ['', Validators.required],
+  //   devices: ['', Validators.required],
+  //   location: ['', Validators.required],
+  //   implementTime: ['', Validators.required],
+  //   scheduledDate: ['', Validators.required],
+  //   requestStatus: [{value :'' , disabled : true }],
+  //   businessJustification: ['', Validators.required],
+  //   CMRdescre: ['', Validators.required],
+  //   riskImpact: ['', Validators.required],
+  //   actionPlan: ['', Validators.required],
+  //   rollbackPlan: ['', Validators.required],
+  //   note: ['', Validators.required],
+  //   backupDate : [''] ,
+  //   notifyEndUser : [''] ,
+  //   verbalApproval : [''] ,
+  //   AttachEmail: [''] ,
+  //   mgrAppr: [''] ,
+  //   mgrReje: [''] ,
+  //   cabmgr: [''] ,
+  //   cabReje: [''] ,
+  //   mgrRejectionReason:[{value :'' , disabled : true }] ,
+  //   cabRejectionReason:[{value :'' , disabled : true }]
+    
+  // });
 
   editTicketFormGroup = this.formBuilder.group({
     ticketNumber: [{value :'' , disabled : true }],
@@ -42,29 +74,29 @@ export class EditRequestComponent implements OnInit {
     createdOn: [{value :'' , disabled : true }],
     SME_Assigned: [{value :'' , disabled : true }],
     approverName: [{value :'' , disabled : true }],
-    type: ['', Validators.required],
-    priority: ['', Validators.required],
-    selectDevice: ['', Validators.required],
-    siteName: ['', Validators.required],
-    devices: ['', Validators.required],
-    location: ['', Validators.required],
-    implementTime: ['', Validators.required],
-    scheduledDate: ['', Validators.required],
-    requestStatus: [{value :'' , disabled : true }],
-    businessJustification: ['', Validators.required],
-    CMRdescre: ['', Validators.required],
-    riskImpact: ['', Validators.required],
-    actionPlan: ['', Validators.required],
-    rollbackPlan: ['', Validators.required],
-    note: ['', Validators.required],
-    backupDate : [''] ,
-    notifyEndUser : [''] ,
-    verbalApproval : [''] ,
-    AttachEmail: [''] ,
-    mgrAppr: [''] ,
-    mgrReje: [''] ,
-    cabmgr: [''] ,
-    cabReje: [''] ,
+    type: [{value :'' , disabled : true }, Validators.required ,],
+    priority: [{value :'' , disabled : true }, Validators.required],
+    selectDevice: [{value :'' , disabled : true }, Validators.required],
+    siteName: [{value :'' , disabled : true }, Validators.required],
+    devices: [{value :'' , disabled : true }, Validators.required],
+    location: [{value :'' , disabled : true }, Validators.required],
+    implementTime: [{value :'' , disabled : true }, Validators.required],
+    scheduledDate: [{value :'' , disabled : true }, Validators.required],
+    requestStatus: [{value :{value :'' , disabled : true } , disabled : true }],
+    businessJustification: [{value :'' , disabled : true }, Validators.required],
+    CMRdescre: [{value :'' , disabled : true }, Validators.required],
+    riskImpact: [{value :'' , disabled : true }, Validators.required],
+    actionPlan: [{value :'' , disabled : true }, Validators.required],
+    rollbackPlan: [{value :'' , disabled : true }, Validators.required],
+    note: [{value :'' , disabled : true }, Validators.required],
+    backupDate : [{value :'' , disabled : true }] ,
+    notifyEndUser : [{value :'' , disabled : true }] ,
+    verbalApproval : [{value :'' , disabled : true }] ,
+    AttachEmail: [{value :'' , disabled : true }] ,
+    mgrAppr: [{value :''  }] ,
+    mgrReje: [{value :''}] ,
+    cabmgr: [{value :'' }] ,
+    cabReje: [{value :'' }] ,
     mgrRejectionReason:[{value :'' , disabled : true }] ,
     cabRejectionReason:[{value :'' , disabled : true }]
     
@@ -118,7 +150,7 @@ export class EditRequestComponent implements OnInit {
   empDevices : any ;
   backupIsSet : any ;
   notifySet : any ;
-  someone : any ;
+  someone : boolean = true ;
   emergenc : any ;
   enablemgrButtons : any ;
   enableCABbuttons : any ;
@@ -130,6 +162,8 @@ export class EditRequestComponent implements OnInit {
   setBackupDate : any ;
   setNotifyDate : any ;
   SystemDate : any;
+  setCreated : any ;
+  mgrRejBtns : boolean = false ;
 
  
  // now = new Date();
@@ -158,58 +192,105 @@ export class EditRequestComponent implements OnInit {
     
   // }
 
-  getTicketDetailsById () : void {
+  // getTicketDetailsById () : void {
     
+  //   let ticket = {requestid:this.ticketService.ticketId};
+  //   this.http.post<any>('http://localhost:3000/RequestManager/requestbyid' , ticket
+  //   ).subscribe(
+  //     response => {
+  //       this.ticketDetails = response.result;
+  //       console.log("TicketDetailsbyId", this.ticketDetails);
+      
+  //     this.SystemDate = new Date().toISOString().slice(0, 10)
+  //       this.setValues();
+  //       this.enableAndDisableViewMode();
+  
+  //     }
+  //   );
+    
+  // }
+   
+  getTicketDetailsById () {
     let ticket = {requestid:this.ticketService.ticketId};
-    this.http.post<any>('http://localhost:3000/RequestManager/requestbyid' , ticket
-    ).subscribe(
+    this.ticketService.getRequestByID(ticket).subscribe(
       response => {
         this.ticketDetails = response.result;
-        console.log("TicketDetails", this.ticketDetails);
-      //  this.manager = this.ticketService.manager1;
-       // this.CABmanager = this.ticketService.cabManager ;
-      //  this.empDevices = this.ticketDetails[0].device;
+        console.log("TicketDetailsbyId", this.ticketDetails);
+      
       this.SystemDate = new Date().toISOString().slice(0, 10)
         this.setValues();
-  
+        this.enableAndDisableViewMode();
       }
     );
-    
   }
 
-  getTypeDropdown () : void {
-    let listmstid = 5 ;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
+
+  enableAndDisableViewMode() {
+    if ((this.ticketDetails[0].createdby === this.ticketService.empDetails[0].empemailid && this.ticketDetails[0].reqstatus === "Draft") || 
+    (this.ticketDetails[0].createdby === this.ticketService.empDetails[0].empemailid && this.ticketDetails[0].reqstatus === "Manager Rejected")) {
+      
+      this.enableAll();
+
+    }
+  }
+
+  // getTypeDropdown () : void {
+  //   let listmstid = 5 ;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
+  //       this.typeList = response.result;
+        
+  
+  //     }
+  //   );
+  // }
+
+  getTypeDropdown () {
+    this.ticketService.getType().subscribe(
       response => {
         this.typeList = response.result;
-        console.log("typeList", this.typeList);
-  
       }
     );
   }
 
-  getPriorityDropdown () : void {
-    let listmstid = 1 ;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
-      response => {
-        this.priorityList = response.result;
-        console.log("priorityList", this.priorityList);
+  // getPriorityDropdown () : void {
+  //   let listmstid = 1 ;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
+  //       this.priorityList = response.result;
+        
         
        
+  //     }
+  //   );
+  // }
+
+  getPriorityDropdown () {
+    this.ticketService.getPriority().subscribe(
+      response => {
+        this.priorityList = response.result;
       }
     );
   }
 
-  getDeviceTypeDropdown () : void {
-    let listmstid = 2 ;
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
+  // getDeviceTypeDropdown () : void {
+  //   let listmstid = 2 ;
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
+  //       this.deviceTypeList = response.result;
+        
+       
+  //     }
+  //   );
+  // }
+
+  getDeviceTypeDropdown() {
+    this.ticketService.getDeviceType().subscribe(
       response => {
         this.deviceTypeList = response.result;
-        console.log("deviceTypeList", this.deviceTypeList);
-       
       }
     );
   }
@@ -225,32 +306,49 @@ export class EditRequestComponent implements OnInit {
   //   );
   // }
 
-  getDevicesDropdown (data : any) : void {
-    let listmstid = data;
+  // getDevicesDropdown (data : any) : void {
+  //   let listmstid = data;
     
-    this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
-    ).subscribe(
+  //   this.http.post<any>('http://localhost:3000/ListDataDetail/getCodeByMasterID' , {listmstid}
+  //   ).subscribe(
+  //     response => {
+  //       this.deviceList = response.result;
+       
+  //     }
+  //   );
+  // }
+
+  getDevicesDropdown(data : any) {
+    this.ticketService.getDevices(data).subscribe(
       response => {
         this.deviceList = response.result;
-       
       }
     );
   }
 
-  getLocationDropdown() : void {
-    debugger
-    this.http.get<any>('http://localhost:3000/LocationManager'
-    ).subscribe(
+  // getLocationDropdown() : void {
+    
+  //   this.http.get<any>('http://localhost:3000/LocationManager'
+  //   ).subscribe(
+  //     response => {
+  //       this.locationList = response.result;
+  //       this.siteNameList = this.locationList;
+       
+  //     }
+  //   );
+  // }
+
+  getLocationDropdown () {
+    this.ticketService.getAllLocations().subscribe(
       response => {
         this.locationList = response.result;
-        this.siteNameList = this.locationList;
-       
+       this.siteNameList = this.locationList;
       }
     );
   }
 
   makeUpdateTicketPayLoad ( ) : void {
-debugger ;
+
     this.ticketNumber = this.editTicketFormGroup.controls['ticketNumber'].value;
     this.empID = this.editTicketFormGroup.controls['empID'].value;
     this.createdBy = this.editTicketFormGroup.controls['createdBy'].value;
@@ -287,23 +385,33 @@ debugger ;
 
 
 
-  sendDataToUpdtTicketAPI () : void {
+  // sendDataToUpdtTicketAPI () : void {
   
-    console.log("sendUPdtPayLoad:" , this.editTicketData )
-    this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , this.editTicketData
-    ).subscribe(
+  //   console.log("sendUpdatePayLoad:" , this.editTicketData )
+  //   this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , this.editTicketData
+  //   ).subscribe(
+  //     response => {
+  //       this.updtTicketResponse = response;
+        
+  //     }
+  //   );
+  
+
+  // }
+
+  sendDataToUpdtTicketAPI () {
+
+    this.ticketService.updateRequest(this.editTicketData).subscribe(
       response => {
         this.updtTicketResponse = response;
-        console.log("updtTicketResponse", this.updtTicketResponse);
-        
+       
       }
     );
-  
 
   }
 
   getCheckboxResponse1() : void {
-    debugger;
+    
     let element = <HTMLInputElement> document.getElementById("flexSwitchCheckDefault"); 
     if (element.checked)
      { 
@@ -323,7 +431,7 @@ debugger ;
   }
 
   getCheckboxResponse2() : void {
-    debugger;
+    
     let element = <HTMLInputElement> document.getElementById("flexSwitchCheckDefault1"); 
     if (element.checked)
      { 
@@ -366,7 +474,7 @@ debugger ;
 
   transformDateToShow (date : any) {
     let givenDate = date.split('/')
-    console.log(givenDate);
+    
     let TransformedDate = givenDate[2] + "-" + givenDate[1] + "-" + givenDate[0];
     return TransformedDate;
 
@@ -375,7 +483,7 @@ debugger ;
   transFormDateToSend (date:any) {
     
     let givenDate = date.split('-')
-    console.log(givenDate);
+    
     let TransformedDate = givenDate[0] + "/" + givenDate[1] + "/" + givenDate[2];
     return TransformedDate;
   }
@@ -386,8 +494,9 @@ debugger ;
     this.editTicketFormGroup.controls['ticketNumber'].setValue(this.ticketDetails[0].requestid);
     this.editTicketFormGroup.controls['empID'].setValue(this.ticketDetails[0].empid);
     this.editTicketFormGroup.controls['createdBy'].setValue(this.ticketDetails[0].createdby);
-   this.editTicketFormGroup.controls.createdOn.setValue(this.ticketDetails[0].createddate);
+   //this.editTicketFormGroup.controls.createdOn.setValue(this.ticketDetails[0].createddate);
 
+   this.setCreated  = this.ticketDetails[0].createddate;
     this.editTicketFormGroup.controls.SME_Assigned.setValue(this.ticketDetails[0].smeemailid);
     this.editTicketFormGroup.controls.approverName.setValue(this.ticketDetails[0].approveremail);
     this.editTicketFormGroup.controls.type.setValue(this.ticketDetails[0].type);
@@ -399,7 +508,7 @@ debugger ;
     this.editTicketFormGroup.controls.location.setValue(this.ticketDetails[0].location);
     this.editTicketFormGroup.controls.implementTime.setValue(this.ticketDetails[0].implemettime);
     //this.editTicketFormGroup.controls.scheduledDate.setValue(this.ticketDetails[0].scheduleddate);
-    this.setScheduleDate = this.transformDateToShow(this.ticketDetails[0].scheduleddate);
+    this.setScheduleDate = this.ticketDetails[0].scheduleddate;
     this.editTicketFormGroup.controls.requestStatus.setValue(this.ticketDetails[0].reqstatus);
     this.editTicketFormGroup.controls.businessJustification.setValue(this.ticketDetails[0].justification);
     this.editTicketFormGroup.controls.CMRdescre.setValue(this.ticketDetails[0].cmrdesc);
@@ -411,22 +520,25 @@ debugger ;
     if (this.ticketDetails[0].type === "Emergency") {
       this.emergenc = true;
       this.editTicketFormGroup.controls.verbalApproval.setValue(this.SystemDate);
+      this.editTicketFormGroup.controls.priority.disable();
      // this.editTicketFormGroup.controls.AttachEmail.setValue("Yes");
     }
     if (this.ticketDetails[0].backup === 1) {
       this.backupIsSet = true;
       this.backupDate = true ;
+      this.backup = 1;
       //this.editTicketFormGroup.controls.backupDate.setValue(this.ticketDetails[0].backupdate);
-      console.log("this.ticketDetails[0].backupdate;" , this.ticketDetails[0].backupdate)
-      this.setBackupDate = this.transformDateToShow(this.ticketDetails[0].backupdate);
-      console.log("this.setBackupDate" , this.setBackupDate);
+      
+      this.setBackupDate = this.ticketDetails[0].backupdate;
+      
       
     }
     if (this.ticketDetails[0].downtime === 1) {
       this.notifySet = true;
       this.notifyEndUser = true;
+      this.downTime = 1;
     //this.editTicketFormGroup.controls.notifyEndUser.setValue(this.ticketDetails[0].downtimenotifydate);
-    this.setNotifyDate = this.transformDateToShow( this.ticketDetails[0].downtimenotifydate);
+    this.setNotifyDate = this.ticketDetails[0].downtimenotifydate;
     
     }
 
@@ -456,11 +568,20 @@ debugger ;
       this.close = true;
     }
 
-    else if ((this.ticketService.empDetails[0].empemailid === this.ticketDetails[0].createdby) && (this.ticketDetails[0].reqstatus === "Manager Rejected" || this.ticketDetails[0].reqstatus === "Draft")) {
+    else if (this.ticketService.empDetails[0].empemailid === this.ticketDetails[0].createdby && this.ticketDetails[0].reqstatus === "Draft") {
       this.enablemgrButtons = false;
       this.empButtons = true;
       this.enableCABbuttons = false ;
       this.close = false;
+    }
+
+    else if (this.ticketService.empDetails[0].empemailid === this.ticketDetails[0].createdby && this.ticketDetails[0].reqstatus === "Manager Rejected") {
+      this.enablemgrButtons = false;
+      this.empButtons = false;
+      this.enableCABbuttons = false ;
+      this.close = false;
+      this.mgrRejBtns = true;
+
     }
 
 
@@ -486,30 +607,30 @@ debugger ;
 
   }
 
-  disableAll () : void {
+  enableAll () : void {
 
-    this.editTicketFormGroup.controls.SME_Assigned.disable();
-    this.editTicketFormGroup.controls.approverName.disable();
-    this.editTicketFormGroup.controls.type.disable();
-    this.editTicketFormGroup.controls.priority.disable();
-    this.editTicketFormGroup.controls.selectDevice.disable();
-    this.editTicketFormGroup.controls.siteName.disable();
-    this.editTicketFormGroup.controls.devices.disable();
-    this.editTicketFormGroup.controls.location.disable();
-    this.editTicketFormGroup.controls.implementTime.disable();
-    this.editTicketFormGroup.controls.scheduledDate.disable();
-    this.editTicketFormGroup.controls.requestStatus.disable();
-    this.editTicketFormGroup.controls.businessJustification.disable();
-    this.editTicketFormGroup.controls.CMRdescre.disable();
-    this.editTicketFormGroup.controls.riskImpact.disable();
-    this.editTicketFormGroup.controls.actionPlan.disable();
-    this.editTicketFormGroup.controls.rollbackPlan.disable();
-    this.editTicketFormGroup.controls.note.disable();
-    this.editTicketFormGroup.controls.backupDate.disable();
-    this.editTicketFormGroup.controls.notifyEndUser.disable();
-    this.editTicketFormGroup.controls.verbalApproval.disable();
-    this.editTicketFormGroup.controls.AttachEmail.disable();
-    this.someone = true ;
+ //   this.editTicketFormGroup.controls.SME_Assigned.enable();
+ //   this.editTicketFormGroup.controls.approverName.enable();
+    this.editTicketFormGroup.controls.type.enable();
+    this.editTicketFormGroup.controls.priority.enable();
+    this.editTicketFormGroup.controls.selectDevice.enable();
+    this.editTicketFormGroup.controls.siteName.enable();
+    this.editTicketFormGroup.controls.devices.enable();
+    this.editTicketFormGroup.controls.location.enable();
+    this.editTicketFormGroup.controls.implementTime.enable();
+    this.editTicketFormGroup.controls.scheduledDate.enable();
+    this.editTicketFormGroup.controls.requestStatus.enable();
+    this.editTicketFormGroup.controls.businessJustification.enable();
+    this.editTicketFormGroup.controls.CMRdescre.enable();
+    this.editTicketFormGroup.controls.riskImpact.enable();
+    this.editTicketFormGroup.controls.actionPlan.enable();
+    this.editTicketFormGroup.controls.rollbackPlan.enable();
+    this.editTicketFormGroup.controls.note.enable();
+    this.editTicketFormGroup.controls.backupDate.enable();
+    this.editTicketFormGroup.controls.notifyEndUser.enable();
+    this.editTicketFormGroup.controls.verbalApproval.enable();
+    this.editTicketFormGroup.controls.AttachEmail.enable();
+    this.someone = false ;
     
   }
 
@@ -579,45 +700,76 @@ sendNewRequest () : void {
 
 }
 
-sendmgrResponse() {
-  let rejectReson = this.editTicketFormGroup.controls['mgrReje'].value;
-  let mgr = {requestid:this.ticketDetails[0].requestid , reqstatus : this.managerRespon , rejreason : rejectReson}
-
-  this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , mgr
-  ).subscribe(
-    response => {
-    //  this.updtTicketResponse = response;
-    //  console.log("updtTicketResponse", this.updtTicketResponse);
-    let updStatus = response;
+// sendmgrResponse() {
+//   let rejectReson = this.editTicketFormGroup.controls['mgrReje'].value;
+//   let mgr = {requestid:this.ticketDetails[0].requestid , reqstatus : this.managerRespon , rejreason : rejectReson , status : this.ticketDetails[0].status }
+//   console.log("mgr response " , mgr);
+//   this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , mgr
+//   ).subscribe(
+//     response => {
+    
+//     let updStatus = response;
       
-    }
-  ); 
+//     }
+//   ); 
 
+// }
+
+sendmgrResponse () {
+
+  let rejectReson = this.editTicketFormGroup.controls['mgrReje'].value;
+  let mgr = {requestid:this.ticketDetails[0].requestid , reqstatus : this.managerRespon , rejreason : rejectReson , status : this.ticketDetails[0].status }
+  this.ticketService.mgrResponse(mgr).subscribe(
+    response => {
+      let updStatus = response;
+    }
+  );
 }
+
+
+// SendCabManagerResponse() {
+//   let cabRejReason = this.editTicketFormGroup.controls['cabReje'].value;
+//   let mgr = {requestid:this.ticketDetails[0].requestid , reqstatus : this.CABrespon , rejreason : cabRejReason , status : this.ticketDetails[0].status}
+
+//   this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , mgr
+//   ).subscribe(
+//     response => {
+      
+//     }
+//   );
+// }
+
 SendCabManagerResponse() {
   let cabRejReason = this.editTicketFormGroup.controls['cabReje'].value;
-  let mgr = {requestid:this.ticketDetails[0].requestid , reqstatus : this.CABrespon , rejreason : cabRejReason}
-
-  this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , mgr
-  ).subscribe(
+  let mgr = {requestid:this.ticketDetails[0].requestid , reqstatus : this.CABrespon , rejreason : cabRejReason , status : this.ticketDetails[0].status}
+  this.ticketService.CABresponse(mgr).subscribe(
     response => {
-    //  this.updtTicketResponse = response;
-    //  console.log("updtTicketResponse", this.updtTicketResponse);
-      
+      let updStatus = response;
     }
   );
 }
+
+// closeTicket () {
+
+//   let closeTicketPayLoad = {requestid:this.ticketDetails[0].requestid , reqstatus :this.ticketDetails[0].reqstatus , status:"closed"}
+//   console.log("closeTicketPayLoad" , closeTicketPayLoad)
+//   this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , closeTicketPayLoad
+//   ).subscribe(
+//     response => {
+    
+      
+//     }
+//   );
+// }
 
 closeTicket () {
-
-  let closeTicketPayLoad = {requestid:this.ticketDetails[0].requestid , status:"closed"}
-  this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , closeTicketPayLoad
-  ).subscribe(
+  let closeTicketPayLoad = {requestid:this.ticketDetails[0].requestid , reqstatus :this.ticketDetails[0].reqstatus , status:"closed"}
+  this.ticketService.closeTicketById(closeTicketPayLoad).subscribe(
     response => {
-    //  this.updtTicketResponse = response;
-    //  console.log("updtTicketResponse", this.updtTicketResponse);
-      
+      let updStatus = response;
     }
   );
 }
+
+
 }

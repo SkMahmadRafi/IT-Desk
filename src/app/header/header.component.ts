@@ -33,11 +33,8 @@ constructor(private msalService:MsalService , private ticketService:TicketServic
   
   ngOnInit(): void {
      
-    console.log('ngOnIt()')
     this.msalService.instance.handleRedirectPromise().then(
           async res=>{
-            console.log('got the response')
-            console.log(res)
             if(res != null && res.account != null){
               this.msalService.instance.setActiveAccount(res.account)
               this.profile=res.account;
@@ -63,7 +60,7 @@ constructor(private msalService:MsalService , private ticketService:TicketServic
   getTokenReponses():any{
     const acc = msal.instance.getAllAccounts()[0]
   msal.instance.acquireTokenPopup({account:acc,scopes:[]}).then((response)=>{
-    console.log('########',response)
+    
     tokens = response
   }
 ).catch((err)=>{
@@ -84,10 +81,10 @@ constructor(private msalService:MsalService , private ticketService:TicketServic
     this.ticketService.getEmpDetails().subscribe(
       response => {
         this.empResponse = response.result;
-        console.log("empRespom", this.empResponse);
-        debugger;
+       
+        
         this.ticketService.empDetails = this.empResponse;
-        debugger
+        
      if (this.empResponse[0].emplevel === "Manager") {
       this.manager = true;
       
@@ -132,7 +129,7 @@ constructor(private msalService:MsalService , private ticketService:TicketServic
   //     }
   //   }
 // )
-  console.log(this.msalService);
+  //console.log(this.msalService);
   
 
 
