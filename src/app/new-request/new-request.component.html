@@ -356,8 +356,8 @@
                             </div>
                             <div class="form-floating mb-3 col-md-3">
 
-                                <input type="text" class="form-control" id="verbalApproval" formControlName="verbalApproval"
-                                    placeholder="verbalApproval">
+                                <input type="date" class="form-control" id="verbalApproval" formControlName="verbalApproval"
+                                    placeholder="verbalApproval" [(ngModel)]="setVerbalDate">
                             </div>
 
                             <div class="mb-2 ">
@@ -365,8 +365,8 @@
                             </div>
                             <div class="col-md-3">
                                 <select id=""  class="form-control mt-2 mb-2" formControlName="email">
-                                    <option  value="Yes">Yes</option>
-                                    <option  value="No">No</option>
+                                    <option  value="1">Yes</option>
+                                    <option  value="0">No</option>
                                     
                                   </select>
                             </div>
@@ -378,12 +378,13 @@
                                 <button type="button" class="btn btn-danger " routerLink="">Cancel</button>
                             </div>
                             <div class="saveBtn">
-                                <button type="button" class="btn btn-success" style="margin-left: 10px;" (click)="sendDraftRequest()" routerLink="" >Save</button>
+                                <button type="button" class="btn btn-success" style="margin-left: 10px;" (click)="sendDraftRequest()"
+                                 routerLink="" [disabled]="!addTicketFormGroup.valid" >Save</button>
                             </div>
                             <div class="submitBtn">
                                 <!-- [disabled]="!addTicketFormGroup.valid" -->
                                 <button class="btn btn-primary" style="margin: 10px;" routerLink=""
-                                    (click)="sendNewRequest()" >Submit</button>
+                                    (click)="sendNewRequest()" [disabled]="!addTicketFormGroup.valid" >Submit</button>
                             </div>
                         </div>  
                         <div>

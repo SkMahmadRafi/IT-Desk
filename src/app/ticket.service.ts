@@ -28,10 +28,9 @@ export class TicketService {
    something : boolean = false ;
   getEmpDetails ()  {
    // this.user = "vishwas26@gmail.com";
- let employee = {empemailid : "mahamad.rafi@jktech.com"} ;
- //  let employee = {empemailid : "mallikarjun.managavi@jktech.com"};
- // let employee = {empemailid : "thummana.pavani@jktech.com"};
-   
+   //  let employee = {empemailid : "mahamad.rafi@jktech.com"};
+ //let employee = {empemailid : "mallikarjun.managavi@jktech.com"};
+  let employee = {empemailid : "thummana.pavani@jktech.com"};
    
    return this.http.post<any>('http://localhost:3000/EmpManager/empfilter' , employee
     )
@@ -88,6 +87,7 @@ export class TicketService {
   }
 
   createRequest (addDraftRequestPayLoad : any) {
+    console.log("addDraftRequestPayLoad" , addDraftRequestPayLoad)
     return this.http.post<any>('http://localhost:3000/RequestManager/createrequest' , addDraftRequestPayLoad)
   }
 
@@ -97,6 +97,7 @@ export class TicketService {
   }
 
   mgrResponse (managerResponse : any) {
+    console.log("managerResponse "  , managerResponse );
     return this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , managerResponse)
   }
 
@@ -105,7 +106,12 @@ export class TicketService {
   }
 
   closeTicketById (closeTicketPayLoad : any) {
+    console.log("close" ,closeTicketPayLoad )
    return this.http.post<any>('http://localhost:3000/RequestManager/updaterequest' , closeTicketPayLoad)
+  }
+
+  ticketSequence () {
+    return this.http.get<any>('http://localhost:3000/RequestManager/ticketid')
   }
 
   isLoggedIn():boolean{

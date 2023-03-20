@@ -27,6 +27,7 @@ export class EditRequestComponent implements OnInit {
     this.getTicketDetailsById();
     this.getLocationDropdown();
     this.selectedDeviceType("dummy");
+    this.getRequestDropdown();
    
   }
   
@@ -94,9 +95,9 @@ export class EditRequestComponent implements OnInit {
     verbalApproval : [{value :'' , disabled : true }] ,
     AttachEmail: [{value :'' , disabled : true }] ,
     mgrAppr: [{value :''  }] ,
-    mgrReje: [{value :''}] ,
+    mgrReje: [''] ,
     cabmgr: [{value :'' }] ,
-    cabReje: [{value :'' }] ,
+    cabReje: [''] ,
     mgrRejectionReason:[{value :'' , disabled : true }] ,
     cabRejectionReason:[{value :'' , disabled : true }]
     
@@ -105,6 +106,7 @@ export class EditRequestComponent implements OnInit {
   
   systemtime : any ;
   ticketNumber : any ;
+  ticketNumberWithPrefix : any ;
   empID : any ;
   createdBy : any ;
   createdOn : any ;
@@ -136,7 +138,8 @@ export class EditRequestComponent implements OnInit {
   siteNameList : any  ;
   deviceList : any ;
   locationList : any ;
-  RequestStatusList: any = [ "Draft" , "New Request" , "Manager Approved" , "Manager Rejected" , "CAB Approved" , "CAB Rejected"];
+ // RequestStatusList: any = [ "Draft" , "New Request" , "Manager Approved" , "Manager Rejected" , "CAB Approved" , "CAB Rejected"];
+ RequestStatusList : any ;
   updtTicketResponse : any ; 
   backup : any = 0;
   downTime : any = 0;
@@ -164,6 +167,10 @@ export class EditRequestComponent implements OnInit {
   SystemDate : any;
   setCreated : any ;
   mgrRejBtns : boolean = false ;
+  verbalApprovalDate : any;
+  attachedEmail : any;
+  setApprovalDate : any ;
+  rejectionReason : any ;
 
  
  // now = new Date();
@@ -216,6 +223,8 @@ export class EditRequestComponent implements OnInit {
       response => {
         this.ticketDetails = response.result;
         console.log("TicketDetailsbyId", this.ticketDetails);
+        console.log("id", this.ticketDetails[0].requestid);
+        this.ticketNumber = this.ticketDetails[0].requestid;
       
       this.SystemDate = new Date().toISOString().slice(0, 10)
         this.setValues();
@@ -229,7 +238,10 @@ export class EditRequestComponent implements OnInit {
     if ((this.ticketDetails[0].createdby === this.ticketService.empDetails[0].empemailid && this.ticketDetails[0].reqstatus === "Draft") || 
     (this.ticketDetails[0].createdby === this.ticketService.empDetails[0].empemailid && this.ticketDetails[0].reqstatus === "Manager Rejected")) {
       
-      this.enableAll();
+      if (this.ticketDetails[0].status === "open") {
+        this.enableAll();
+      }
+     
 
     }
   }
@@ -273,6 +285,17 @@ export class EditRequestComponent implements OnInit {
         this.priorityList = response.result;
       }
     );
+  }
+
+  getRequestDropdown () {
+
+    this.ticketService.getRequestStatuses().subscribe(
+      response => {
+        this.RequestStatusList = response.result;
+        
+      }
+    );
+
   }
 
   // getDeviceTypeDropdown () : void {
@@ -349,7 +372,7 @@ export class EditRequestComponent implements OnInit {
 
   makeUpdateTicketPayLoad ( ) : void {
 
-    this.ticketNumber = this.editTicketFormGroup.controls['ticketNumber'].value;
+    //this.ticketNumber = this.editTicketFormGroup.controls['ticketNumber'].value;
     this.empID = this.editTicketFormGroup.controls['empID'].value;
     this.createdBy = this.editTicketFormGroup.controls['createdBy'].value;
     this.createdOn = this.editTicketFormGroup.controls['createdOn'].value;
@@ -373,6 +396,8 @@ export class EditRequestComponent implements OnInit {
     this.note = this.editTicketFormGroup.controls['note'].value;
     this.backupDate = this.editTicketFormGroup.controls['backupDate'].value;
     this.notifyEndUser = this.editTicketFormGroup.controls['notifyEndUser'].value;
+    this.verbalApprovalDate = this.editTicketFormGroup.controls['verbalApproval'].value;
+    this.attachedEmail = this.editTicketFormGroup.controls['AttachEmail'].value;
     
        //let checkbox = document.getElementById("flexSwitchCheckDefault");
        
@@ -453,9 +478,14 @@ export class EditRequestComponent implements OnInit {
     
     if (value === "Manager Approved"){
       this.managerReject = false;
+     // this.editTicketFormGroup.controls['mgrReje'].clearValidators();
+      this.editTicketFormGroup.controls['mgrReje'].setValidators([]);
+      this.editTicketFormGroup.controls['mgrReje'].updateValueAndValidity();
     }
     else {
       this.managerReject = true;
+      this.editTicketFormGroup.controls['mgrReje'].setValidators([Validators.required]);
+      this.editTicketFormGroup.controls['mgrReje'].updateValueAndValidity();
     }
     
   }
@@ -466,9 +496,16 @@ export class EditRequestComponent implements OnInit {
     this.CABrespon = value
     if (value === "CAB Approved"){
       this.CABrejected = false;
+    //  this.editTicketFormGroup.controls['cabReje'].clearValidators();
+      this.editTicketFormGroup.controls['cabReje'].setValidators([]);
+      this.editTicketFormGroup.controls['cabReje'].updateValueAndValidity();
     }
     else {
       this.CABrejected = true;
+     // this.editTicketFormGroup.controls['cabReje'].setValue("");
+      this.editTicketFormGroup.controls['cabReje'].setValidators([Validators.required]);
+      this.editTicketFormGroup.controls['cabReje'].updateValueAndValidity();
+      
     }
   }
 
@@ -491,7 +528,7 @@ export class EditRequestComponent implements OnInit {
   setValues () : void {
     
     
-    this.editTicketFormGroup.controls['ticketNumber'].setValue(this.ticketDetails[0].requestid);
+    this.editTicketFormGroup.controls['ticketNumber'].setValue("CMR-" + this.ticketNumber);
     this.editTicketFormGroup.controls['empID'].setValue(this.ticketDetails[0].empid);
     this.editTicketFormGroup.controls['createdBy'].setValue(this.ticketDetails[0].createdby);
    //this.editTicketFormGroup.controls.createdOn.setValue(this.ticketDetails[0].createddate);
@@ -519,9 +556,12 @@ export class EditRequestComponent implements OnInit {
     
     if (this.ticketDetails[0].type === "Emergency") {
       this.emergenc = true;
-      this.editTicketFormGroup.controls.verbalApproval.setValue(this.SystemDate);
+      //this.editTicketFormGroup.controls.verbalApproval.setValue(this.ticketDetails[0].verbalapprovaldate);
+      this.setApprovalDate = this.ticketDetails[0].verbalapprovaldate;
       this.editTicketFormGroup.controls.priority.disable();
-     // this.editTicketFormGroup.controls.AttachEmail.setValue("Yes");
+      this.editTicketFormGroup.controls.AttachEmail.setValue(this.ticketDetails[0].isemailattached);
+      this.editTicketFormGroup.controls['AttachEmail'].setValidators([Validators.required]);
+      this.editTicketFormGroup.controls['AttachEmail'].updateValueAndValidity();
     }
     if (this.ticketDetails[0].backup === 1) {
       this.backupIsSet = true;
@@ -530,7 +570,6 @@ export class EditRequestComponent implements OnInit {
       //this.editTicketFormGroup.controls.backupDate.setValue(this.ticketDetails[0].backupdate);
       
       this.setBackupDate = this.ticketDetails[0].backupdate;
-      
       
     }
     if (this.ticketDetails[0].downtime === 1) {
@@ -546,9 +585,10 @@ export class EditRequestComponent implements OnInit {
       this.manager = true;
       this.enablemgrButtons = true ;
       this.empButtons = false;
-      this.enableCABbuttons = false;  
-      
-
+      this.enableCABbuttons = false;
+      this.editTicketFormGroup.controls['mgrAppr'].setValidators([Validators.required]);
+      this.editTicketFormGroup.controls['mgrAppr'].updateValueAndValidity();
+      debugger;
 
 
     }
@@ -558,6 +598,8 @@ export class EditRequestComponent implements OnInit {
       this.enableCABbuttons = true ;
       this.enablemgrButtons = false ;
       this.empButtons = false;
+      this.editTicketFormGroup.controls['cabmgr'].setValidators([Validators.required]);
+      this.editTicketFormGroup.controls['cabmgr'].updateValueAndValidity();
 
     }
 
@@ -575,7 +617,8 @@ export class EditRequestComponent implements OnInit {
       this.close = false;
     }
 
-    else if (this.ticketService.empDetails[0].empemailid === this.ticketDetails[0].createdby && this.ticketDetails[0].reqstatus === "Manager Rejected") {
+    else if (this.ticketService.empDetails[0].empemailid === this.ticketDetails[0].createdby && this.ticketDetails[0].reqstatus === "Manager Rejected"
+            && this.ticketDetails[0].status === "open") {
       this.enablemgrButtons = false;
       this.empButtons = false;
       this.enableCABbuttons = false ;
@@ -590,6 +633,8 @@ export class EditRequestComponent implements OnInit {
       this.mgrRjctRsn = true;
       this.editTicketFormGroup.controls.mgrRejectionReason.setValue(this.ticketDetails[0].rejreason);
     }
+
+    
     // if (this.ticketDetails[0].rejreason != "") {
     //   this.mgrRjctRsn = true;
     //   this.editTicketFormGroup.controls.cabRejectionReason.setValue(this.ticketDetails[0].rejreason);
@@ -619,7 +664,7 @@ export class EditRequestComponent implements OnInit {
     this.editTicketFormGroup.controls.location.enable();
     this.editTicketFormGroup.controls.implementTime.enable();
     this.editTicketFormGroup.controls.scheduledDate.enable();
-    this.editTicketFormGroup.controls.requestStatus.enable();
+   // this.editTicketFormGroup.controls.requestStatus.enable();
     this.editTicketFormGroup.controls.businessJustification.enable();
     this.editTicketFormGroup.controls.CMRdescre.enable();
     this.editTicketFormGroup.controls.riskImpact.enable();
@@ -651,15 +696,22 @@ export class EditRequestComponent implements OnInit {
       this.editTicketFormGroup.controls['priority'].setValue("Critical");
       this.editTicketFormGroup.controls.priority.disable();
       this.emergenc = true ;
+      this.setApprovalDate = this.SystemDate;
+      this.editTicketFormGroup.controls['AttachEmail'].setValidators([Validators.required]);
+      this.editTicketFormGroup.controls['AttachEmail'].updateValueAndValidity();
 
 
       
     }
     else {
       this.emergenc = false ;
-      this.editTicketFormGroup.controls['priority'].setValue("");
+      this.editTicketFormGroup.controls['priority'].setValue("Low");
      // this.priorityList = [{listdtlcode : "High" }, {listdtlcode : "Medium" },{listdtlcode : "Low" }]
       this.editTicketFormGroup.controls.priority.enable();
+      this.setApprovalDate = ""; 
+     // this.editTicketFormGroup.controls['AttachEmail'].clearValidators();
+      this.editTicketFormGroup.controls['AttachEmail'].setValidators([]);
+      this.editTicketFormGroup.controls['AttachEmail'].updateValueAndValidity();
     }
 
 }
@@ -675,7 +727,8 @@ sendDraftRequest () : void {
     device:this.devices,location:this.location,implemettime:this.implementTime,
     scheduleddate:this.scheduledDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
     cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
-    relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
+    relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser ,
+    verbalapprovaldate : this.verbalApprovalDate , isemailattached : this.attachedEmail}
     
     this.sendDataToUpdtTicketAPI();
 
@@ -693,7 +746,8 @@ sendNewRequest () : void {
     device:this.devices,location:this.location,implemettime:this.implementTime,
     scheduleddate:this.scheduledDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
     cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
-    relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
+    relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser,
+    verbalapprovaldate : this.verbalApprovalDate , isemailattached : this.attachedEmail}
     
     this.sendDataToUpdtTicketAPI();
     
@@ -763,13 +817,13 @@ SendCabManagerResponse() {
 // }
 
 closeTicket () {
-  let closeTicketPayLoad = {requestid:this.ticketDetails[0].requestid , reqstatus :this.ticketDetails[0].reqstatus , status:"closed"}
+  // 
+  let closeTicketPayLoad = {requestid:this.ticketDetails[0].requestid , reqstatus :this.ticketDetails[0].reqstatus , empid:this.ticketService.empDetails[0].empid , status:"closed"}
   this.ticketService.closeTicketById(closeTicketPayLoad).subscribe(
     response => {
       let updStatus = response;
     }
   );
 }
-
 
 }

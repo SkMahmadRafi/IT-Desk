@@ -81,7 +81,7 @@ export class DashboardComponent implements OnInit {
    //if (this.ticketService.loggedIn === true) {
    
   //  this.log = true;
-  
+  debugger;
  
   this.some = setTimeout(() => {
     this.getAllRequest();
@@ -120,8 +120,8 @@ export class DashboardComponent implements OnInit {
     
     this.ticketService.getAllTickets().subscribe(
       response => {
-        this.tickets = response.result;
-        
+        this.tickets = response;
+        this.tickets = this.tickets.result;
         if (this.ticketService.filtered === true) {
                   this.getFlteredRecords();
                  }
@@ -162,7 +162,8 @@ export class DashboardComponent implements OnInit {
 
     this.ticketService.getType().subscribe(
       response => {
-        this.typeList = response.result;
+        this.typeList = response;
+        this.typeList = this.typeList.result;
       }
     );
 
@@ -184,7 +185,8 @@ export class DashboardComponent implements OnInit {
   getPriorityDropdown () {
     this.ticketService.getPriority().subscribe(
       response => {
-        this.priorityList = response.result;
+        this.priorityList = response;
+        this.priorityList = this.priorityList.result;
       }
     );
   }
@@ -204,7 +206,8 @@ export class DashboardComponent implements OnInit {
   getDeviceTypeDropdown () {
     this.ticketService.getDeviceType().subscribe(
       response => {
-        this.deviceTypeList = response.result;
+        this.deviceTypeList = response;
+        this.deviceTypeList = this.deviceTypeList.result;
       }
     );
   }
@@ -299,13 +302,15 @@ export class DashboardComponent implements OnInit {
       let filterPayLoad = {
         type: this.ticketService.filterChangeType,
         priority: this.ticketService.filterPriority,
-        reqstatus: this.ticketService.filterDeviceType,
-        devicetype: this.ticketService.filterstatus
+        reqstatus: this.ticketService.filterstatus  ,
+        devicetype: this.ticketService.filterDeviceType
       };
 
       this.ticketService.filterTickets(filterPayLoad).subscribe(
         response => {
-          this.tickets = response.result;
+          this.tickets = response;
+          this.tickets = this.tickets.result;
+          console.log("filtered tickets :"  ,this.tickets )
         }
       );
 
@@ -338,13 +343,14 @@ export class DashboardComponent implements OnInit {
     let filterPayLoad = {
           type: this.ticketService.filterChangeType,
           priority: this.ticketService.filterPriority,
-          reqstatus: this.ticketService.filterDeviceType,
-          devicetype: this.ticketService.filterstatus
+          reqstatus: this.ticketService.filterstatus  ,
+          devicetype: this.ticketService.filterDeviceType
         };
 
         this.ticketService.filteredTickets(filterPayLoad).subscribe(
           response => {
-            this.tickets = response.result;
+            this.tickets = response;
+            this.tickets = this.tickets.result;
           }
         );
 
@@ -361,6 +367,7 @@ export class DashboardComponent implements OnInit {
     this.ticketService.filterChangeType = "";
     this.ticketService.filterPriority = "";
     this.ticketService.filterDeviceType = "";
+    this.ticketService.filterstatus = "";
     this.getAllRequest();
   }
 
@@ -402,7 +409,8 @@ export class DashboardComponent implements OnInit {
 
     this.ticketService.getRequestByID(ticket).subscribe(
       response => {
-        this.tickets = response.result;
+        this.tickets = response ;
+        this.tickets = this.tickets.result;
       }
     );
 

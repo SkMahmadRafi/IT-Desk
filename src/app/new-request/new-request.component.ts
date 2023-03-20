@@ -22,6 +22,7 @@ export class NewRequestComponent implements OnInit{
   //  this.getEmpDetails();
    // this.getDevicesDropdown(3);
     this.getDate();
+    this.getTicketNumber();
     this.getTypeDropdown();
     this.getPriorityDropdown();
     this.getDeviceTypeDropdown();
@@ -39,6 +40,7 @@ export class NewRequestComponent implements OnInit{
   
   systemtime : any ;
   ticketNumber : any ;
+  ticketNumberWithPrefix : any ;
   empID : any ;
   createdBy : any ;
   createdOn : any ;
@@ -94,6 +96,7 @@ export class NewRequestComponent implements OnInit{
   teststartDate : any ;
   SystemDate : any;
   setCreatedDate : any ;
+  setVerbalDate : any;
   
   
 
@@ -145,25 +148,12 @@ export class NewRequestComponent implements OnInit{
    this.SystemDate = new Date().toISOString().slice(0, 10)
    console.log("this.SystemDate" ,this.SystemDate); // in ui (mm/dd/yyyy) in console (yyyy-mm-dd)
    // this.addTicketFormGroup.controls['createdOn'].setValue(this.SystemDate);
-   this.setCreatedDate = this.SystemDate;
-    
-   // this.addTicketFormGroup.controls.implementTime.setValue(this.systemtime);
-    this.addTicketFormGroup.controls.ticketNumber.setValue("CR-23456");
-    this.addTicketFormGroup.controls.empID.setValue(this.ticketService.empDetails[0].empid);
-    this.addTicketFormGroup.controls['SME_Assigned'].setValue(this.ticketService.empDetails[0].empemailid);
-    this.addTicketFormGroup.controls['createdBy'].setValue(this.ticketService.empDetails[0].empemailid);
-    this.addTicketFormGroup.controls['approverName'].setValue(this.ticketService.empDetails[0].mgremailid);
-    this.addTicketFormGroup.controls['type'].setValue("Normal");
-    this.addTicketFormGroup.controls['priority'].setValue("Low");
-   // 
-   // this.addTicketFormGroup.controls['scheduledDate'].setValue(this.SystemDate);
-   this.setScheduletDate = this.SystemDate;
-    this.addTicketFormGroup.controls['selectDevice'].setValue(this.ticketService.empDetails[0].device);
-    this.addTicketFormGroup.controls['requestStatus'].setValue("New Request");
-    
+
 
     
   }
+
+  
 
   // getEmpDetails () : void {
   //   this.SME_Assigned = "vishwas26@gmail.com";
@@ -216,11 +206,45 @@ export class NewRequestComponent implements OnInit{
   //   );
   // }
 
+  getTicketNumber () {
+
+    this.ticketService.ticketSequence().subscribe(
+      response => {
+        this.ticketNumber = response.result;
+        this.setInitialValues() ;
+        
+      }
+    );
+
+  }
+
+  setInitialValues () {
+
+    this.setCreatedDate = this.SystemDate;
+    
+   // this.addTicketFormGroup.controls.implementTime.setValue(this.systemtime);
+  // this.ticketNumberWithPrefix = "CMR-" + this.ticketNumber;
+    this.addTicketFormGroup.controls.ticketNumber.setValue("CMR-" + this.ticketNumber);
+    this.addTicketFormGroup.controls.empID.setValue(this.ticketService.empDetails[0].empid);
+    this.addTicketFormGroup.controls['SME_Assigned'].setValue(this.ticketService.empDetails[0].empemailid);
+    this.addTicketFormGroup.controls['createdBy'].setValue(this.ticketService.empDetails[0].empemailid);
+    this.addTicketFormGroup.controls['approverName'].setValue(this.ticketService.empDetails[0].mgremailid);
+    this.addTicketFormGroup.controls['type'].setValue("Normal");
+    this.addTicketFormGroup.controls['priority'].setValue("Low");
+   // 
+   // this.addTicketFormGroup.controls['scheduledDate'].setValue(this.SystemDate);
+   this.setScheduletDate = this.SystemDate;
+    this.addTicketFormGroup.controls['selectDevice'].setValue(this.ticketService.empDetails[0].device);
+    this.addTicketFormGroup.controls['requestStatus'].setValue("New Request");
+
+  }
+
   getTypeDropdown () {
 
     this.ticketService.getType().subscribe(
       response => {
         this.typeList = response.result;
+        
       }
     );
 
@@ -362,7 +386,7 @@ export class NewRequestComponent implements OnInit{
   makePostTicketPayLoad ( ) : void {
     
 
-    this.ticketNumber = this.addTicketFormGroup.controls['ticketNumber'].value;
+    //this.ticketNumber = this.addTicketFormGroup.controls['ticketNumber'].value;
     this.empID = this.addTicketFormGroup.controls['empID'].value;
     this.createdBy = this.addTicketFormGroup.controls['createdBy'].value;
     //this.createdOn = this.addTicketFormGroup.controls['createdOn'].value?.split('/');
@@ -444,7 +468,8 @@ export class NewRequestComponent implements OnInit{
       device:this.devices,location:this.location,implemettime:this.implementTime,
       scheduleddate:this.scheduleDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
       cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
-      relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
+      relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser ,
+      verbalapprovaldate : this.verbalApproval , isemailattached : this.email}
       console.log("this.adddraftTicketData" , this.addTicketData);
 
       this.ticketService.createRequest(this.addTicketData).subscribe(
@@ -497,7 +522,8 @@ export class NewRequestComponent implements OnInit{
       device:this.devices,location:this.location,implemettime:this.implementTime,
       scheduleddate:this.scheduleDate,reqstatus:this.RequestStatus,justification:this.businessJustification,
       cmrdesc:this.CMRdescre,risk:this.riskImpact,actionplan:this.actionPlan,rollbackplan:this.rollbackPlan,
-      relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser}
+      relincident:this.note,backup:this.backup,backupdate:this.backupDate,downtime:this.downTime,downtimenotifydate:this.notifyEndUser ,
+      verbalapprovaldate : this.verbalApproval , isemailattached : this.email}
 
       this.ticketService.createRequest(this.addTicketData).subscribe(
         response => {
@@ -514,12 +540,13 @@ export class NewRequestComponent implements OnInit{
       this.backupDate = true;
       this.backup = 1 ;
      // this.addTicketFormGroup.controls['backupDate'].setValue(this.SystemDate);
-     this.setBackupDate = this.SystemDate;
+    this.setBackupDate = this.SystemDate;
+    // this.addTicketFormGroup.controls['backupDate'].setValidators([Validators.required]);
      
     }
     else {
       this.backupDate = false;
-      this.backup = 0 ; 
+      this.backup = 0 ;
      // this.addTicketFormGroup.controls['backupDate'].setValue("");
      this.setBackupDate = "";
     }
@@ -533,12 +560,14 @@ export class NewRequestComponent implements OnInit{
       this.downTime = 1;
      // this.addTicketFormGroup.controls['notifyEndUser'].setValue(this.SystemDate);
      this.setNotifyDate = this.SystemDate;
+     
     }
     else {
       this.notifyEndUser = false;
       this.downTime = 0;
      // this.addTicketFormGroup.controls['notifyEndUser'].setValue("");
      this.setNotifyDate = "";
+    // this.addTicketFormGroup.controls['backupDate'].setValidators([Validators.required])
     }
   }
    
@@ -548,13 +577,21 @@ export class NewRequestComponent implements OnInit{
       this.addTicketFormGroup.controls['priority'].setValue("Critical");
       this.addTicketFormGroup.controls.priority.disable();
       this.emergenc = true ;
+      this.setVerbalDate = this.SystemDate;
+    
+    this.addTicketFormGroup.controls['email'].setValidators([Validators.required]);
+    this.addTicketFormGroup.controls['email'].setValue("");
+    this.addTicketFormGroup.controls['email'].updateValueAndValidity();
       
     }
     else {
       this.emergenc = false ;
-      this.addTicketFormGroup.controls['priority'].setValue("");
-      this.priorityList = [{listdtlcode : "High" }, {listdtlcode : "Medium" },{listdtlcode : "Low" }]
+      this.addTicketFormGroup.controls['priority'].setValue("Low");
+      //this.priorityList = [{listdtlcode : "High" }, {listdtlcode : "Medium" },{listdtlcode : "Low" }]
       this.addTicketFormGroup.controls.priority.enable();
+      this.setVerbalDate = "";
+    this.addTicketFormGroup.controls['email'].setValidators([]);
+    this.addTicketFormGroup.controls['email'].updateValueAndValidity();
     }
 
   }

@@ -168,7 +168,7 @@
                         <div class="mb-3 col-md-3">
                             <select class="form-control " formControlName="requestStatus" >
                                
-                                <option *ngFor="let RequestStatus of RequestStatusList" value="{{RequestStatus}}">{{RequestStatus}}</option>
+                                <option *ngFor="let RequestStatus of RequestStatusList" value="{{RequestStatus.listdtlcode}}">{{RequestStatus.listdtlcode}}</option>
                                 
                               </select>
                         </div>
@@ -283,6 +283,31 @@
                         </div>
 
                     </div>
+
+                    <div *ngIf="emergenc" class="mt-2 padLeft">
+
+                        <div class="mb-2">
+                            <label for="">Please mention the date when verbal approval was taken from the change approver</label>
+                        </div>
+                        <div class="form-floating mb-3 col-md-3">
+
+                            <input type="date" class="form-control" id="backupDate" formControlName="verbalApproval"
+                                placeholder="backupDate" [(ngModel)]="setApprovalDate">
+                        </div>
+
+                        <div class="mb-2 ">
+                            <label for="">You must attach an E-Mail sent to change approver on the ticket. Has it been done?</label>
+                        </div>
+                        <div class="col-md-3">
+                            <select id=""  class="form-control mt-2 mb-2" formControlName="AttachEmail">
+                                <option  value="1">Yes</option>
+                                <option  value="0">No</option>
+                                
+                              </select>
+                        </div>
+
+                    </div>
+
                     <div *ngIf="manager" class="mt-2 padLeft">
                         <label for="managerApprove">Would you like to approve or reject</label>
                         <div class="row">
@@ -324,29 +349,7 @@
 
                     </div>
 
-                    <div *ngIf="emergenc" class="mt-2 padLeft">
-
-                        <div class="mb-2">
-                            <label for="">Please mention the date when verbal approval was taken from the change approver</label>
-                        </div>
-                        <div class="form-floating mb-3 col-md-3">
-
-                            <input type="text" class="form-control" id="backupDate" formControlName="verbalApproval"
-                                placeholder="backupDate">
-                        </div>
-
-                        <div class="mb-2 ">
-                            <label for="">You must attach an E-Mail sent to change approver on the ticket. Has it been done?</label>
-                        </div>
-                        <div class="col-md-3">
-                            <select id=""  class="form-control mt-2 mb-2" formControlName="AttachEmail">
-                                <option  value="Yes">Yes</option>
-                                <option  value="No">No</option>
-                                
-                              </select>
-                        </div>
-
-                    </div>
+                    
 
                     
                         <div *ngIf="mgrRjctRsn" class="row justify-content-center">
@@ -365,15 +368,16 @@
 
                     <div *ngIf="empButtons" style="float: right;" class="">
                         <div class="cancelBtn ">
-                            <button type="button" class="btn btn-danger " routerLink="">Cancel</button>
+                            <button type="button" class="btn btn-danger " routerLink="" >Cancel</button>
                         </div>
                         <div class="saveBtn ">
-                            <button type="button"  class="btn btn-success" style="margin-left: 10px;" routerLink="" (click)="sendDraftRequest()">Save</button>
+                            <button type="button"  class="btn btn-success" style="margin-left: 10px;" routerLink="" 
+                            [disabled]="!editTicketFormGroup.valid" (click)="sendDraftRequest()">Save</button>
                         </div>
                         <div class="submitBtn">
                             <!-- [disabled]="!addTicketFormGroup.valid" -->
                             <button class="btn btn-primary" style="margin: 10px;" routerLink=""
-                                (click)="sendNewRequest()">Submit</button>
+                            [disabled]="!editTicketFormGroup.valid"  (click)="sendNewRequest()">Submit</button>
                         </div>
                     </div>
                     <div *ngIf="enablemgrButtons" style="float: right;" class="">
@@ -386,7 +390,7 @@
                         <div class="submitBtn">
                             <!-- [disabled]="!addTicketFormGroup.valid" -->
                             <button class="btn btn-primary" style="margin: 10px;" routerLink=""
-                                (click)="sendmgrResponse()">Submit</button>
+                            [disabled]="!editTicketFormGroup.valid"  (click)="sendmgrResponse()">Submitmgr</button>
                         </div>
                     </div>
                     <div *ngIf="enableCABbuttons" style="float: right;" class="">
@@ -399,7 +403,7 @@
                         <div class="submitBtn">
                             <!-- [disabled]="!addTicketFormGroup.valid" -->
                             <button class="btn btn-primary" style="margin: 10px;" routerLink=""
-                                (click)="SendCabManagerResponse()">Submit</button>
+                            [disabled]="!editTicketFormGroup.valid"  (click)="SendCabManagerResponse()">SubmitCab</button>
                         </div>
                     </div>
                     <div *ngIf="close" style="float: right;" class="">
@@ -420,12 +424,13 @@
                             <button type="button" class="btn btn-danger "  data-bs-toggle="modal" data-bs-target="#closeTicketPop">Close Ticket</button>
                         </div>
                         <div class="saveBtn ">
-                            <button type="button"  class="btn btn-success" style="margin-left: 10px;" routerLink="" (click)="sendDraftRequest()">Save</button>
+                            <button type="button"  class="btn btn-success" style="margin-left: 10px;" routerLink=""
+                            [disabled]="!editTicketFormGroup.valid" (click)="sendDraftRequest()">Save</button>
                         </div>
                         <div class="submitBtn">
                             <!-- [disabled]="!addTicketFormGroup.valid" -->
                             <button class="btn btn-primary" style="margin: 10px;" routerLink=""
-                                (click)="sendNewRequest()">Submit</button>
+                            [disabled]="!editTicketFormGroup.valid"  (click)="sendNewRequest()">Submit</button>
                         </div>
                     </div>
                     <div>
